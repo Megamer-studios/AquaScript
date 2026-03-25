@@ -204,8 +204,8 @@ namespace Shinterface
                         int wid = int.Parse(s2[1]);
                         int hei = int.Parse(s2[2]);
                         List<Control> controls = new List<Control>();
-                        foreach (string line in s2) { 
-                        if (line.StartsWith("label-"))
+                        foreach (string line in s2) {
+                            if (line.StartsWith("label-"))
                             {
                                 string text = line.Substring(6);
                                 Label label = new Label();
@@ -216,8 +216,8 @@ namespace Shinterface
                             }
                             else if (line.StartsWith("quit-form-button"))
                             {
-                              Button button = new Button();
-                                   button.Text = "Exit";
+                                Button button = new Button();
+                                button.Text = "Exit";
                                 button.Click += (o, e) => { form.Close(); };
                                 Size size = TextRenderer.MeasureText(button.Text, button.Font);
                                 button.Size = size;
@@ -232,7 +232,19 @@ namespace Shinterface
                                 button.Size = size;
                                 controls.Add(button);
                             }
+                            else if (line.StartsWith("image-"))
+                            {
+                                string text = line.Substring(7);
+                                PictureBox pictureBox = new PictureBox();
+                                pictureBox.Image = Image.FromFile(text.Replace("^", " "));
+                                pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                                pictureBox.Width = pictureBox.Image.Width;
+                                pictureBox.Height = pictureBox.Image.Height;
+                                controls.Add(pictureBox);
+                            }
                         }
+                        
+                        
                         //if (s1.Contains("button-"))
                         // {
                         //     string text = s2.Find(x => x.StartsWith("button-"));
