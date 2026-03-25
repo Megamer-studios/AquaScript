@@ -209,6 +209,7 @@ namespace Shinterface
                             {
                                 string text = line.Substring(6);
                                 Label label = new Label();
+                                label.Font = textBox1.Font;
                                 label.Text = text.Replace("^", " ");
                                 Size size = TextRenderer.MeasureText(label.Text, label.Font);
                                 label.Size = size;
@@ -218,6 +219,7 @@ namespace Shinterface
                             {
                                 Button button = new Button();
                                 button.Text = "Exit";
+                                button.Font = textBox1.Font;
                                 button.Click += (o, e) => { form.Close(); };
                                 Size size = TextRenderer.MeasureText(button.Text, button.Font);
                                 button.Size = size;
@@ -227,6 +229,7 @@ namespace Shinterface
                             {
                                 Button button = new Button();
                                 button.Text = "Quit";
+                                button.Font = textBox1.Font;
                                 button.Click += (o, e) => { Debug.Close(); Application.Exit(); wtf = true; this.Close(); };
                                 Size size = TextRenderer.MeasureText(button.Text, button.Font);
                                 button.Size = size;
@@ -234,7 +237,7 @@ namespace Shinterface
                             }
                             else if (line.StartsWith("image-"))
                             {
-                                string text = line.Substring(7);
+                                string text = line.Substring(6);
                                 PictureBox pictureBox = new PictureBox();
                                 pictureBox.Image = Image.FromFile(text.Replace("^", " "));
                                 pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -275,7 +278,121 @@ namespace Shinterface
                             form.Controls.Add(flowLayoutPanel2);
                         }
 
-                        form.ShowDialog();
+
+                        form.ShowDialog(); // command handling is supressed until the form is closed
+
+                        /* form.Show();*/ // uncomment this line and comment line 282 for chaos!
+
+
+                        //await  CreateForm(title, wid, hei, controls);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+
+
+                }
+                else if (command.StartsWith("flowform "))
+                {
+
+                    try
+                    {
+                        Form form = new Form();
+                        string s1 = command.Substring(10);
+                        List<string> s2 = s1.Split(" ").ToList();
+                        await NewLine("Creating new window!", Color.Green, Color.LightGray);
+                        foreach (string line in s2)
+                        {
+                            await NewLine(line, Color.Green, Color.LightGray);
+                        }
+                        string title = s2[0].Replace("^", " ");
+                        int wid = int.Parse(s2[1]);
+                        int hei = int.Parse(s2[2]);
+                        List<Control> controls = new List<Control>();
+                        foreach (string line in s2)
+                        {
+                            if (line.StartsWith("label-"))
+                            {
+                                string text = line.Substring(6);
+                                Label label = new Label();
+                                label.Font = textBox1.Font;
+                                label.Text = text.Replace("^", " ");
+                                Size size = TextRenderer.MeasureText(label.Text, label.Font);
+                                label.Size = size;
+                                controls.Add(label);
+                            }
+                            else if (line.StartsWith("quit-form-button"))
+                            {
+                                Button button = new Button();
+                                button.Text = "Exit";
+                                button.Font = textBox1.Font;
+                                button.Click += (o, e) => { form.Close(); };
+                                Size size = TextRenderer.MeasureText(button.Text, button.Font);
+                                button.Size = size;
+                                controls.Add(button);
+                            }
+                            else if (line.StartsWith("quit-app-button"))
+                            {
+                                Button button = new Button();
+                                button.Text = "Quit";
+                                button.Font = textBox1.Font;
+                                button.Click += (o, e) => { Debug.Close(); Application.Exit(); wtf = true; this.Close(); };
+                                Size size = TextRenderer.MeasureText(button.Text, button.Font);
+                                button.Size = size;
+                                controls.Add(button);
+                            }
+                            else if (line.StartsWith("image-"))
+                            {
+                                string text = line.Substring(6);
+                                PictureBox pictureBox = new PictureBox();
+                                pictureBox.Image = Image.FromFile(text.Replace("^", " "));
+                                pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                                pictureBox.Width = pictureBox.Image.Width;
+                                pictureBox.Height = pictureBox.Image.Height;
+                                controls.Add(pictureBox);
+                            }
+                        }
+
+
+                        //if (s1.Contains("button-"))
+                        // {
+                        //     string text = s2.Find(x => x.StartsWith("button-"));
+                        //     s2.Remove(text);
+                        //     text = text.Replace("button-", "");
+                        //     Button button = new Button();
+                        //     button.Text = text;
+                        //     button.Width = 150;
+                        //     button.Height = 50;
+                        //     controls.Add(button);
+                        // }
+                        form.MaximizeBox = false;
+                        form.Text = title;
+                        form.Width = wid;
+                        form.Height = hei;
+                        form.FormBorderStyle = FormBorderStyle.Fixed3D;
+                        FlowLayoutPanel flowLayoutPanel2 = new FlowLayoutPanel();
+                        flowLayoutPanel2.Dock = DockStyle.Fill;
+                        flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
+                        flowLayoutPanel2.WrapContents = false;
+                        if (controls != null)
+                        {
+                            foreach (Control control in controls)
+                            {
+                                flowLayoutPanel2.Controls.Add(control);
+
+                            }
+                            form.Controls.Add(flowLayoutPanel2);
+                        }
+
+
+                  
+
+                        form.Show(); 
+
+
                         //await  CreateForm(title, wid, hei, controls);
 
                     }
