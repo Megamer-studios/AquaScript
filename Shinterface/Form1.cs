@@ -168,9 +168,38 @@ namespace Shinterface
                         string[] lines = File.ReadAllLines(link);
                         
                         foreach (string line in lines) { 
-                        await HandleCommands(line);
+                        await HandleCommands(line.Trim());
                         }
                        
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+
+
+                }
+                else if (command == "runscript-gui")
+                {
+
+                    try
+                    {
+                        OpenFileDialog openFileDialog = new OpenFileDialog();
+                        
+                        if (openFileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            string link = openFileDialog.FileName;
+                            await NewLine("Running script: " + link, Color.LightSkyBlue, null);
+                            string[] lines = File.ReadAllLines(link);
+
+                            foreach (string line in lines)
+                            {
+                                await HandleCommands(line.Trim());
+                            }
+                        }
+                       
+
                     }
                     catch (Exception ex)
                     {
