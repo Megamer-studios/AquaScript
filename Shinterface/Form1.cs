@@ -1,13 +1,20 @@
 using System.Diagnostics;
 using System.Net;
+using System.Reflection.Emit;
+using static System.Windows.Forms.LinkLabel;
+using Label = System.Windows.Forms.Label;
 
 namespace Shinterface
 {
     public partial class Form1 : Form
     {
-        public Form1()
+        bool wtf = false;
+        public Form1(string[] args)
         {
             InitializeComponent();
+            if (args.Length >= 1) { 
+            HandleCommands("run " + args[1]).Wait();
+            }
         }
 
         private async void textBox1_TextChanged(object sender, EventArgs e)
@@ -180,6 +187,106 @@ namespace Shinterface
 
 
                 }
+                else if (command.StartsWith("basicform "))
+                {
+
+                    try
+                    {
+                        Form form = new Form();
+                        string s1 = command.Substring(10);
+                        List<string> s2 = s1.Split(" ").ToList();
+                        await NewLine("Creating new window!", Color.Green, Color.LightGray);
+                        foreach (string line in s2)
+                        {
+                            await NewLine(line, Color.Green, Color.LightGray);
+                        }
+                        string title = s2[0].Replace("^", " ");
+                        int wid = int.Parse(s2[1]);
+                        int hei = int.Parse(s2[2]);
+                        List<Control> controls = new List<Control>();
+                        foreach (string line in s2) { 
+                        if (line.StartsWith("label-"))
+                            {
+                                string text = line.Substring(6);
+                                Label label = new Label();
+                                label.Text = text.Replace("^", " ");
+                                Size size = TextRenderer.MeasureText(label.Text, label.Font);
+                                label.Size = size;
+                                controls.Add(label);
+                            }
+                            else if (line.StartsWith("quit-form-button"))
+                            {
+                              Button button = new Button();
+                                   button.Text = "Exit";
+                                button.Click += (o, e) => { form.Close(); };
+                                Size size = TextRenderer.MeasureText(button.Text, button.Font);
+                                button.Size = size;
+                                controls.Add(button);
+                            }
+                            else if (line.StartsWith("quit-app-button"))
+                            {
+                                Button button = new Button();
+                                button.Text = "Quit";
+                                button.Click += (o, e) => { Debug.Close(); Application.Exit(); wtf = true; this.Close(); };
+                                Size size = TextRenderer.MeasureText(button.Text, button.Font);
+                                button.Size = size;
+                                controls.Add(button);
+                            }
+                        }
+                        //if (s1.Contains("button-"))
+                        // {
+                        //     string text = s2.Find(x => x.StartsWith("button-"));
+                        //     s2.Remove(text);
+                        //     text = text.Replace("button-", "");
+                        //     Button button = new Button();
+                        //     button.Text = text;
+                        //     button.Width = 150;
+                        //     button.Height = 50;
+                        //     controls.Add(button);
+                        // }
+                     form.MaximizeBox = false;
+                        form.Text = title;
+                        form.Width = wid;
+                        form.Height = hei;
+                        form.FormBorderStyle = FormBorderStyle.Fixed3D;
+                        FlowLayoutPanel flowLayoutPanel2 = new FlowLayoutPanel();
+                        flowLayoutPanel2.Dock = DockStyle.Fill;
+                        flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
+                        flowLayoutPanel2.WrapContents = false;
+                        if (controls != null)
+                        {
+                            foreach (Control control in controls)
+                            {
+                                flowLayoutPanel2.Controls.Add(control);
+
+                            }
+                            form.Controls.Add(flowLayoutPanel2);
+                        }
+
+                        form.ShowDialog();
+                        //await  CreateForm(title, wid, hei, controls);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+
+
+                }
+                else if (command == "hidecli")
+                {
+                    this.Hide();
+                    await NewLine("Hid the terminal", null, null);
+
+                }
+                else if (command == "showcli")
+                {
+                    this.Show();
+                    await NewLine("Unhid the terminal", null, null);
+
+                }
                 else if (command == "runscript-gui")
                 {
 
@@ -226,6 +333,12 @@ namespace Shinterface
 
         private async Task NewLine(string text, Color? front, Color? back)
         {
+            if (wtf)
+            {
+                Application.Exit();
+                this.Close();
+                Debug.Close();
+            }
             TextBox textBox = new TextBox();
             textBox.Text = text;
             textBox.Font = textBox1.Font;
@@ -245,12 +358,46 @@ namespace Shinterface
             textBox.Width = size.Width;
             
             flowLayoutPanel1.Controls.Add(textBox);
-            flowLayoutPanel1.Controls.SetChildIndex(textBox1, flowLayoutPanel1.Controls.Count);
+            try
+            {
+                flowLayoutPanel1.Controls.SetChildIndex(textBox1, flowLayoutPanel1.Controls.Count);
+            }
+            catch (Exception ex)
+            {
+                {
+                    await NewLine(ex.Message, Color.Red, null);
+                }
+            }
+           
         }
 
         private void flowLayoutPanel1_Click(object sender, EventArgs e)
         {
             textBox1.Focus();
         }
+
+        //private async Task CreateForm(string title, int width, int height, List<Control>? controls)
+        //{
+        //    Form form = new Form();
+        //    form.Text = title;
+        //    form.Width = width;
+        //    form.Height = height;
+        //    form.FormBorderStyle = FormBorderStyle.Fixed3D;
+        //    FlowLayoutPanel flowLayoutPanel2 = new FlowLayoutPanel();
+        //    flowLayoutPanel2.Dock = DockStyle.Fill;
+        //    flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
+        //    flowLayoutPanel2.WrapContents = false;
+        //    if (controls != null)
+        //    {
+        //        foreach (Control control in controls)
+        //        {
+        //            flowLayoutPanel2.Controls.Add(control);
+
+        //        }
+        //        form.Controls.Add(flowLayoutPanel2);
+        //    }
+           
+        //    form.ShowDialog();
+        //}
     }
 }
