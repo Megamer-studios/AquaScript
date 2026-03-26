@@ -251,6 +251,10 @@ namespace Shinterface
                             {
                                 horizontalbo = true;
                             }
+                            else if (line == "vars")
+                            {
+                                controls.AddRange(UserVariables);
+                            }
                         }
                         
                         
@@ -368,6 +372,10 @@ namespace Shinterface
                             {
                                 horizontalbo = true;
                             }
+                            else if (line == "vars")
+                            {
+                                controls.AddRange(UserVariables);
+                            }
                         }
 
 
@@ -470,6 +478,34 @@ namespace Shinterface
                     Application.Exit();
 
                 }
+                // Uservariables
+                else if (command.StartsWith("$button "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(8);
+                        string[] s2 = s1.Split(' ');
+                        Button button = new Button();
+                        button.Text = s2[0];
+                        UserVariables.Add(button);
+                        
+                    }
+                    catch (Exception ex) {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+                    
+                }
+                else if (command == "usrvars")
+                {
+                    foreach (var control in UserVariables)
+                    {
+                        await NewLine(control.ToString(), null, null);
+                    }
+                }
+                else if (command == "clear-usrvars")
+                {
+                    UserVariables.Clear();
+                }
                 else
                 {
                     await NewLine($"The command '{command}' is not recognized as a command!", Color.Red, Color.White);
@@ -523,7 +559,7 @@ namespace Shinterface
         {
             textBox1.Focus();
         }
-
+        
         //private async Task CreateForm(string title, int width, int height, List<Control>? controls)
         //{
         //    Form form = new Form();
