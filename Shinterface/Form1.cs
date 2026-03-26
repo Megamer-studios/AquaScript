@@ -587,9 +587,11 @@ namespace Shinterface
                         int a = int.Parse(s2[0]);
 
                         Label thisControl = (Label)UserVariables[a];
-                       thisControl.Text = s1.Substring(s2[0].Length); ;
+                        thisControl.Text = s1.Substring(s2[0].Length); ;
                         thisControl.Size = TextRenderer.MeasureText(thisControl.Text, thisControl.Font);
                     }
+
+
                     catch (Exception ex)
                     {
                         await NewLine(ex.Message, Color.Red, null);

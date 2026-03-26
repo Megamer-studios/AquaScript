@@ -7,7 +7,7 @@ namespace Shinterface
     internal class VariableHandler
     {
         public static string HandleStrings(string a) {
-            string FetchString = "   OS Platform : " + Environment.OSVersion.Platform.ToString() + "   OS Version : " + Environment.OSVersion.VersionString + "   OS SP : " + Environment.OSVersion.ServicePack + "   PC Name : " + Environment.MachineName + "   Is 64bit? : " + Environment.Is64BitOperatingSystem.ToString();
+            string FetchString = "   OS Platform : " + Environment.OSVersion.Platform.ToString() + "\n   OS Version : " + Environment.OSVersion.VersionString + "\n   OS SP : " + Environment.OSVersion.ServicePack + "\n   PC Name : " + Environment.MachineName + "\n   Is 64bit? : " + Environment.Is64BitOperatingSystem.ToString();
            a = a.Replace("{osplatform}", Environment.OSVersion.Platform.ToString());
             a = a.Replace("{osversion}", Environment.OSVersion.VersionString);
             a = a.Replace("{osspm}", Environment.OSVersion.ServicePack);
