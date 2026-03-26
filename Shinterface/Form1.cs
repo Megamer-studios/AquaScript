@@ -568,6 +568,7 @@ namespace Shinterface
 
                         Label thisControl = (Label)UserVariables[a];
                        thisControl.Text = s1.Replace(s2[0], string.Empty);
+                        thisControl.Size = TextRenderer.MeasureText(thisControl.Text, thisControl.Font);
                     }
                     catch (Exception ex)
                     {
