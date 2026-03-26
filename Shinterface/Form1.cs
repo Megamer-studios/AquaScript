@@ -51,6 +51,7 @@ namespace Shinterface
         private async Task HandleCommands(string input)
         {
             string command = input.Trim();
+            command = VariableHandler.HandleStrings(command);
             if (!string.IsNullOrEmpty(command))
             {
                 await NewLine(command, Color.Gray, null);
@@ -172,7 +173,7 @@ namespace Shinterface
 
                     try
                     {
-                        string link = command.Substring(10);
+                        string link = command.Substring(10).Replace("\"", " ");
                         await NewLine("Running script: " + link, Color.LightSkyBlue, null);
                         string[] lines = File.ReadAllLines(link);
                         
@@ -478,7 +479,7 @@ namespace Shinterface
                     Application.Exit();
 
                 }
-                // Uservariables
+                // User-variables
                 else if (command.StartsWith("$button "))
                 {
                     try
@@ -486,7 +487,9 @@ namespace Shinterface
                         string s1 = command.Substring(8);
                         string[] s2 = s1.Split(' ');
                         Button button = new Button();
-                        button.Text = s2[0];
+                        button.Font = textBox1.Font;
+                        button.Text = s2[0].Replace("^", " ");
+                        button.Size = TextRenderer.MeasureText(s2[0], button.Font);
                         UserVariables.Add(button);
                         
                     }
@@ -494,6 +497,25 @@ namespace Shinterface
                         await NewLine(ex.Message, Color.Red, null);
                     }
                     
+                }
+                else if (command.StartsWith("$label "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(8);
+                        string[] s2 = s1.Split(' ');
+                        Label label = new Label();
+                        label.Font = textBox1.Font;
+                        label.Text = s2[0].Replace("^", " ");
+                        label.Size = TextRenderer.MeasureText(s2[0], label.Font);
+                        UserVariables.Add(label);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
                 }
                 else if (command.StartsWith("$b-"))
                 {
@@ -535,6 +557,22 @@ namespace Shinterface
                     
 
 
+                }
+                else if (command.StartsWith("$l-"))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(3);
+                        List<string> s2 = s1.Split(' ').ToList();
+                        int a = int.Parse(s2[0]);
+
+                        Label thisControl = (Label)UserVariables[a];
+                       thisControl.Text = s1.Replace(s2[0], string.Empty);
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
                 }
                 else if (command == "usrvars")
                 {
