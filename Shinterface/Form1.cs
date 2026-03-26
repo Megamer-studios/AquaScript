@@ -502,13 +502,33 @@ namespace Shinterface
                 {
                     try
                     {
-                        string s1 = command.Substring(8);
+                        string s1 = command.Substring(7);
                         string[] s2 = s1.Split(' ');
                         Label label = new Label();
                         label.Font = textBox1.Font;
                         label.Text = s2[0].Replace("^", " ");
                         label.Size = TextRenderer.MeasureText(s2[0], label.Font);
                         UserVariables.Add(label);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+                }
+                else if (command.StartsWith("$image "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(7);
+                        string[] s2 = s1.Split(' ');
+                        PictureBox picture = new PictureBox();
+                      
+                        picture.Image = Image.FromFile(s2[0].Replace("\"", "").Replace("^"," "));
+                        picture.Width = picture.Image.Width;
+                        picture.Height = picture.Image.Height;
+                        UserVariables.Add(picture);
 
                     }
                     catch (Exception ex)
@@ -526,7 +546,7 @@ namespace Shinterface
                         int a = int.Parse(s2[0]);
 
                         Button thisControl = (Button)UserVariables[a];
-                        string arg = s1.Replace(s2[0], " ");
+                        string arg = s1.Substring(s2[0].Length);
                         
                         //s2.Remove(s2[0]);
                         //string arg ="";
@@ -567,7 +587,7 @@ namespace Shinterface
                         int a = int.Parse(s2[0]);
 
                         Label thisControl = (Label)UserVariables[a];
-                       thisControl.Text = s1.Replace(s2[0], string.Empty);
+                       thisControl.Text = s1.Substring(s2[0].Length); ;
                         thisControl.Size = TextRenderer.MeasureText(thisControl.Text, thisControl.Font);
                     }
                     catch (Exception ex)
