@@ -8,6 +8,8 @@ namespace Shinterface
 {
     public partial class Form1 : Form
     {
+
+        List<Control> UserVariables = new List<Control>();
         bool wtf = false;
         public Form1(string[] args)
         {
@@ -189,7 +191,7 @@ namespace Shinterface
                 }
                 else if (command.StartsWith("basicform "))
                 {
-
+                    bool horizontalbo = false;
                     try
                     {
                         Form form = new Form();
@@ -245,6 +247,10 @@ namespace Shinterface
                                 pictureBox.Height = pictureBox.Image.Height;
                                 controls.Add(pictureBox);
                             }
+                            else if (line == "horizontal")
+                            {
+                                horizontalbo = true;
+                            }
                         }
                         
                         
@@ -266,7 +272,10 @@ namespace Shinterface
                         form.FormBorderStyle = FormBorderStyle.Fixed3D;
                         FlowLayoutPanel flowLayoutPanel2 = new FlowLayoutPanel();
                         flowLayoutPanel2.Dock = DockStyle.Fill;
-                        flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
+                        if (!horizontalbo)
+                        {
+                            flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
+                        }
                         flowLayoutPanel2.WrapContents = false;
                         if (controls != null)
                         {
@@ -297,9 +306,10 @@ namespace Shinterface
                 }
                 else if (command.StartsWith("flowform "))
                 {
-
+                    bool horizontalbo = false;
                     try
                     {
+                       
                         Form form = new Form();
                         string s1 = command.Substring(10);
                         List<string> s2 = s1.Split(" ").ToList();
@@ -354,6 +364,10 @@ namespace Shinterface
                                 pictureBox.Height = pictureBox.Image.Height;
                                 controls.Add(pictureBox);
                             }
+                            else if (line == "horizontal")
+                            {
+                                horizontalbo = true;
+                            }
                         }
 
 
@@ -372,10 +386,15 @@ namespace Shinterface
                         form.Text = title;
                         form.Width = wid;
                         form.Height = hei;
+                        
                         form.FormBorderStyle = FormBorderStyle.Fixed3D;
                         FlowLayoutPanel flowLayoutPanel2 = new FlowLayoutPanel();
                         flowLayoutPanel2.Dock = DockStyle.Fill;
-                        flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
+
+                        if (!horizontalbo)
+                        {
+                            flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
+                        }
                         flowLayoutPanel2.WrapContents = false;
                         if (controls != null)
                         {
