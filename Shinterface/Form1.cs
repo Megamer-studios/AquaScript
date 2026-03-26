@@ -315,7 +315,7 @@ namespace Shinterface
                     {
                        
                         Form form = new Form();
-                        string s1 = command.Substring(10);
+                        string s1 = command.Substring(9);
                         List<string> s2 = s1.Split(" ").ToList();
                         await NewLine("Creating new window!", Color.Green, Color.LightGray);
                         foreach (string line in s2)
@@ -495,11 +495,45 @@ namespace Shinterface
                     }
                     
                 }
+                else if (command.StartsWith("$b-"))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(3);
+                        List<string> s2 = s1.Split(' ').ToList();
+                        int a = int.Parse(s2[0]);
+
+                        Button thisControl = (Button)UserVariables[a];
+                        s2.Remove(s2[0]);
+                        string arg = s2.ToString();
+                        List<string> cmnds = arg.Split(";").ToList();
+
+                        foreach (string cmnd in cmnds) {
+                            cmnd.Replace(";", "");
+                            await NewLine(cmnd, null, null);
+                        }
+                        thisControl.Click += async (o, s) =>
+                        {
+                            foreach (string cmnd in cmnds) { 
+                            await HandleCommands(cmnd);
+                            }
+                        };
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+                   
+
+                    
+
+
+                }
                 else if (command == "usrvars")
                 {
                     foreach (var control in UserVariables)
                     {
-                        await NewLine(control.ToString(), null, null);
+                        await NewLine( UserVariables.IndexOf(control).ToString() + " : "+control.ToString(), null, null);
                     }
                 }
                 else if (command == "clear-usrvars")
