@@ -504,12 +504,19 @@ namespace Shinterface
                         int a = int.Parse(s2[0]);
 
                         Button thisControl = (Button)UserVariables[a];
-                        s2.Remove(s2[0]);
-                        string arg = s2.ToString();
+                        string arg = s1.Replace(s2[0], " ");
+                        
+                        //s2.Remove(s2[0]);
+                        //string arg ="";
+                        //foreach (string s in s2)
+                        //{
+                        //    arg += s;
+                        //}
+                       
                         List<string> cmnds = arg.Split(";").ToList();
 
                         foreach (string cmnd in cmnds) {
-                            cmnd.Replace(";", "");
+                          
                             await NewLine(cmnd, null, null);
                         }
                         thisControl.Click += async (o, s) =>
