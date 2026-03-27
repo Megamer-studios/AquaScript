@@ -13,7 +13,8 @@ namespace Shinterface
         List<Control> UserVariables = new List<Control>();
         bool wtf = false;
         bool out1 = false;
-       public static string Out2 = "";
+        string last;
+        public static string Out2 = "";
         public Form1(string[] args)
         {
             InitializeComponent();
@@ -21,6 +22,7 @@ namespace Shinterface
             {
                 HandleCommands("run " + args[1]).Wait();
             }
+
         }
 
         private async void textBox1_TextChanged(object sender, EventArgs e)
@@ -50,11 +52,14 @@ namespace Shinterface
                 e.Handled = true;
                 await HandleCommands(textBox1.Text);
             }
+
+
         }
 
         private async Task HandleCommands(string input)
         {
             string raw = input.Trim();
+            last = raw;
             string command = input.Trim();
             command = HandleStrings(command);
             if (!string.IsNullOrEmpty(command))
@@ -494,7 +499,7 @@ namespace Shinterface
                     try
                     {
                         string s1 = command.Substring(8);
-                      
+
                         Button button = new Button();
                         button.Font = textBox1.Font;
                         button.Text = s1;
@@ -513,7 +518,7 @@ namespace Shinterface
                     try
                     {
                         string s1 = command.Substring(7);
-                     
+
                         Label label = new Label();
                         label.Font = textBox1.Font;
                         label.Text = s1;
@@ -532,7 +537,7 @@ namespace Shinterface
                     try
                     {
                         string s1 = command.Substring(7);
-                       
+
                         TextBox label = new TextBox();
                         label.Font = textBox1.Font;
                         label.Text = s1;
@@ -555,7 +560,7 @@ namespace Shinterface
                 //    try
                 //    {
                 //        string s1 = command.Substring(5);
-                  
+
                 //        NumericUpDown label = new NumericUpDown();
                 //        label.Font = textBox1.Font;
                 //        label.Value = int.Parse(s1);
@@ -661,67 +666,77 @@ namespace Shinterface
                         await HandleCommands(s1);
                         out1 = false;
                     }
-                    catch (Exception ex) {
+                    catch (Exception ex)
+                    {
                         await NewLine(ex.Message, Color.Red, null);
                     }
 
-                  
+
 
                 }
                 else if (command.StartsWith("add "))
-                {try { 
-                    string[] s1 = command.Split(" ");
-                    int a = int.Parse(s1[1]);
-                    int b = int.Parse(s1[2]);
-                    int c = a + b;
-                    await NewLine(c.ToString(), null, null);
-                }
-                    catch (Exception ex) {
-                    await NewLine(ex.Message, Color.Red, null);
-                }
+                {
+                    try
+                    {
+                        string[] s1 = command.Split(" ");
+                        int a = int.Parse(s1[1]);
+                        int b = int.Parse(s1[2]);
+                        int c = a + b;
+                        await NewLine(c.ToString(), null, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
 
-            }
+                }
                 else if (command.StartsWith("sub "))
                 {
-                    try { 
-                    string[] s1 = command.Split(" ");
-                    int a = int.Parse(s1[1]);
-                    int b = int.Parse(s1[2]);
-                    int c = a - b;
-                    await NewLine(c.ToString(), null, null);
-                }
-                    catch (Exception ex) {
-                    await NewLine(ex.Message, Color.Red, null);
-                }
+                    try
+                    {
+                        string[] s1 = command.Split(" ");
+                        int a = int.Parse(s1[1]);
+                        int b = int.Parse(s1[2]);
+                        int c = a - b;
+                        await NewLine(c.ToString(), null, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
 
-            }
+                }
                 else if (command.StartsWith("div "))
                 {
-                    try { 
-                    string[] s1 = command.Split(" ");
-                    int a = int.Parse(s1[1]);
-                    int b = int.Parse(s1[2]);
-                    int c = a / b;
-                    await NewLine(c.ToString(), null, null);
+                    try
+                    {
+                        string[] s1 = command.Split(" ");
+                        int a = int.Parse(s1[1]);
+                        int b = int.Parse(s1[2]);
+                        int c = a / b;
+                        await NewLine(c.ToString(), null, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
                 }
-                    catch (Exception ex) {
-                    await NewLine(ex.Message, Color.Red, null);
-                }
-            }
                 else if (command.StartsWith("mul "))
                 {
-                    try { 
-                    string[] s1 = command.Split(" ");
-                    int a = int.Parse(s1[1]);
-                    int b = int.Parse(s1[2]);
-                    int c = a * b;
-                    await NewLine(c.ToString(), null, null);
-                }
-                    catch (Exception ex) {
-                    await NewLine(ex.Message, Color.Red, null);
-                }
+                    try
+                    {
+                        string[] s1 = command.Split(" ");
+                        int a = int.Parse(s1[1]);
+                        int b = int.Parse(s1[2]);
+                        int c = a * b;
+                        await NewLine(c.ToString(), null, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
 
-            }
+                }
                 else if (command == "usrvars")
                 {
                     foreach (var control in UserVariables)
@@ -779,7 +794,7 @@ namespace Shinterface
                     await NewLine(ex.Message, Color.Red, null);
                 }
             }
-           if (out1)
+            if (out1)
             {
                 Out2 = text;
             }
@@ -804,7 +819,7 @@ namespace Shinterface
                 }
                 return match.Value;
             });
-                return a;
+            return a;
         }
 
         private void flowLayoutPanel1_Click(object sender, EventArgs e)
@@ -829,9 +844,27 @@ namespace Shinterface
                 case Label lb: return lb.Text;
                 case Button btn: return btn.Text;
                 case CheckBox cb: return cb.Checked.ToString();
-                case NumericUpDown num: return num.Value.ToString();
-                case PictureBox pb: return pb.Tag?.ToString() ?? ""; // or some image-path storage
+                case PictureBox pb: return pb.ImageLocation ?? "";
                 default: return ctrl.Text ?? string.Empty;
+            }
+        }
+
+        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+
+
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up) {
+                e.Handled = true;
+                textBox1.Text = last;
             }
         }
         //private async Task CreateForm(string title, int width, int height, List<Control>? controls)

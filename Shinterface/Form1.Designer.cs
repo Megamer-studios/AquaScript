@@ -60,6 +60,7 @@
             textBox1.TabIndex = 0;
             textBox1.WordWrap = false;
             textBox1.TextChanged += textBox1_TextChanged;
+            textBox1.KeyDown += textBox1_KeyDown;
             textBox1.KeyPress += textBox1_KeyPress;
             // 
             // Form1
@@ -75,6 +76,8 @@
             Name = "Form1";
             Text = "AquaCLI";
             Load += Form1_Load;
+            KeyDown += Form1_KeyDown;
+            KeyPress += Form1_KeyPress;
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             ResumeLayout(false);
