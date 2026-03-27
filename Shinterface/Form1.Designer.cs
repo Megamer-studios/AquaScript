@@ -35,6 +35,7 @@
             // 
             // flowLayoutPanel1
             // 
+            flowLayoutPanel1.AllowDrop = true;
             flowLayoutPanel1.AutoScroll = true;
             flowLayoutPanel1.BackColor = Color.Black;
             flowLayoutPanel1.Controls.Add(textBox1);
@@ -47,6 +48,7 @@
             flowLayoutPanel1.TabIndex = 0;
             flowLayoutPanel1.WrapContents = false;
             flowLayoutPanel1.Click += flowLayoutPanel1_Click;
+            flowLayoutPanel1.DragDrop += flowLayoutPanel1_DragDrop;
             // 
             // textBox1
             // 
@@ -65,6 +67,7 @@
             // 
             // Form1
             // 
+            AllowDrop = true;
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaptionText;
@@ -76,6 +79,7 @@
             Name = "Form1";
             Text = "AquaCLI";
             Load += Form1_Load;
+            DragDrop += Form1_DragDrop;
             KeyDown += Form1_KeyDown;
             KeyPress += Form1_KeyPress;
             flowLayoutPanel1.ResumeLayout(false);

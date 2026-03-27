@@ -59,6 +59,10 @@ namespace Shinterface
         private async Task HandleCommands(string input)
         {
             string raw = input.Trim();
+            if (raw.StartsWith("//"))
+            {
+                return;
+            }
             last = raw;
             string command = input.Trim();
             command = HandleStrings(command);
@@ -674,6 +678,13 @@ namespace Shinterface
 
 
                 }
+                else if (command == "clear-out")
+                {
+                    Out2 = String.Empty;
+
+
+
+                }
                 else if (command.StartsWith("add "))
                 {
                     try
@@ -747,7 +758,7 @@ namespace Shinterface
                 else if (command == "clear-usrvars")
                 {
                     UserVariables.Clear();
-                }
+                }  
                 else
                 {
                     await NewLine($"The command '{command}' is not recognized as a command!", Color.Red, Color.White);
@@ -862,10 +873,23 @@ namespace Shinterface
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Up) {
+            if (e.KeyCode == Keys.Up)
+            {
                 e.Handled = true;
                 textBox1.Text = last;
             }
+        }
+
+        private async void Form1_DragDrop(object sender, DragEventArgs e)
+        {
+            string a = e.ToString();
+            await NewLine(a, null, null);
+        }
+
+        private async void flowLayoutPanel1_DragDrop(object sender, DragEventArgs e)
+        {
+            string a = e.ToString();
+            await NewLine(a, null, null);
         }
         //private async Task CreateForm(string title, int width, int height, List<Control>? controls)
         //{
