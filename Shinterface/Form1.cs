@@ -1,6 +1,9 @@
+using Microsoft.Win32;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.Net;
 using System.Reflection.Emit;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using static System.Windows.Forms.LinkLabel;
 using Label = System.Windows.Forms.Label;
@@ -14,7 +17,7 @@ namespace Shinterface
         bool wtf = false;
         bool out1 = false;
         string last;
-        public static string Out2 = "";
+        string out2 = "";
         public Form1(string[] args)
         {
             InitializeComponent();
@@ -450,6 +453,71 @@ namespace Shinterface
 
 
                 }
+                // -Wallpapers begin-
+                else if (command.StartsWith("wlp-fill "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(9);
+                        Wallpaper.Set(s1.Replace('"', ' '), "Fill");
+                        await NewLine("Wallpaper(fill) set to : " + s1, null, null);
+                    }
+                    catch (Exception ex) {
+
+                        await NewLine(ex.Message, null, null);
+                            }
+                   
+                }
+                else if (command.StartsWith("wlp-fit "))
+                {try { 
+                    string s1 = command.Substring(8);
+                    Wallpaper.Set(s1.Replace('"', ' '), "Fit");
+                    await NewLine("Wallpaper(fit) set to : " + s1, null, null);
+                }
+                    catch (Exception ex) {
+
+                    await NewLine(ex.Message, null, null);
+                }
+            }
+                else if (command.StartsWith("wlp-stretch "))
+                {try { 
+                    string s1 = command.Substring(12);
+                    Wallpaper.Set(s1.Replace('"', ' '), "Stretch");
+                    await NewLine("Wallpaper(stretch) set to : " + s1, null, null);
+                }
+                    catch (Exception ex) {
+
+                    await NewLine(ex.Message, null, null);
+                }
+            }
+                else if (command.StartsWith("wlp-tile "))
+                {try { 
+                    string s1 = command.Substring(9);
+                    Wallpaper.Set(s1.Replace('"', ' '), "Tile");
+                    await NewLine("Wallpaper(tile) set to : " + s1, null, null);
+                }
+                    catch (Exception ex) {
+
+                    await NewLine(ex.Message, null, null);
+                }
+            }
+                else if (command.StartsWith("wlp-span "))
+                {
+                    try { 
+                    string s1 = command.Substring(9);
+                    Wallpaper.Set(s1.Replace('"', ' '), "Span");
+                    await NewLine("Wallpaper(span) set to : " + s1, null, null);
+                }
+                    catch (Exception ex) {
+
+                    await NewLine(ex.Message, null, null);
+                }
+            }
+                // -Wallpaper -end
+                else if (command == "g-rundirec")
+                {
+                    await NewLine(Environment.ProcessPath, null, null);
+                }
                 else if (command == "hidecli")
                 {
                     this.Hide();
@@ -654,7 +722,6 @@ namespace Shinterface
                         thisControl.Size = TextRenderer.MeasureText(thisControl.Text, thisControl.Font);
                     }
 
-
                     catch (Exception ex)
                     {
                         await NewLine(ex.Message, Color.Red, null);
@@ -680,7 +747,7 @@ namespace Shinterface
                 }
                 else if (command == "clear-out")
                 {
-                    Out2 = String.Empty;
+                    out2 = String.Empty;
 
 
 
@@ -758,7 +825,7 @@ namespace Shinterface
                 else if (command == "clear-usrvars")
                 {
                     UserVariables.Clear();
-                }  
+                }
                 else
                 {
                     await NewLine($"The command '{command}' is not recognized as a command!", Color.Red, Color.White);
@@ -807,7 +874,7 @@ namespace Shinterface
             }
             if (out1)
             {
-                Out2 = text;
+                out2 = text;
             }
 
 
@@ -820,7 +887,7 @@ namespace Shinterface
             a = a.Replace("{osspm}", Environment.OSVersion.ServicePack);
             a = a.Replace("{pcname}", Environment.MachineName.ToString());
             a = a.Replace("{fetchresult}", FetchString);
-            a = a.Replace("{out}", Form1.Out2);
+            a = a.Replace("{out}", out2);
 
             a = Regex.Replace(a, "\\{\\$\\s*(\\d+)\\s*\\}", match =>
             {
@@ -914,5 +981,116 @@ namespace Shinterface
 
         //    form.ShowDialog();
         //}
+    }
+    public sealed class Wallpaper
+    {
+        public static string ErrorMessage;
+        public static bool IsError;
+        private const int SPI_SETDESKWALLPAPER = 20;
+        private const int SPIF_UPDATEINIFILE = 1;
+        private const int SPIF_SENDWININICHANGE = 2;
+
+
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern int SystemParametersInfo(
+          int uAction,
+          int uParam,
+          string lpvParam,
+          int fuWinIni);
+
+        public static void Set(string file, string style)
+        {
+            using (Stream stream = (Stream)new MemoryStream(File.ReadAllBytes(file)))
+            {
+                Image image = Image.FromStream(stream);
+                string lpvParam = Path.Combine(Path.GetTempPath(), "wallpaper.bmp");
+                string filename = lpvParam;
+                ImageFormat bmp = ImageFormat.Bmp;
+                image.Save(filename, bmp);
+                RegistryKey registryKey1 = Registry.CurrentUser.OpenSubKey("Control Panel\\Desktop", true);
+                if (style == "Fill")
+                {
+                    RegistryKey registryKey2 = registryKey1;
+                    int num = 10;
+                    string str1 = num.ToString();
+                    registryKey2.SetValue("WallpaperStyle", (object)str1);
+                    RegistryKey registryKey3 = registryKey1;
+                    num = 0;
+                    string str2 = num.ToString();
+                    registryKey3.SetValue("TileWallpaper", (object)str2);
+                }
+                else if (style == "Fit")
+                {
+                    RegistryKey registryKey4 = registryKey1;
+                    int num = 6;
+                    string str3 = num.ToString();
+                    registryKey4.SetValue("WallpaperStyle", (object)str3);
+                    RegistryKey registryKey5 = registryKey1;
+                    num = 0;
+                    string str4 = num.ToString();
+                    registryKey5.SetValue("TileWallpaper", (object)str4);
+                }
+                else if (style == "Strech")
+                {
+                    RegistryKey registryKey6 = registryKey1;
+                    int num = 2;
+                    string str5 = num.ToString();
+                    registryKey6.SetValue("WallpaperStyle", (object)str5);
+                    RegistryKey registryKey7 = registryKey1;
+                    num = 0;
+                    string str6 = num.ToString();
+                    registryKey7.SetValue("TileWallpaper", (object)str6);
+                }
+                else if (style == "Tile")
+                {
+                    RegistryKey registryKey8 = registryKey1;
+                    int num = 0;
+                    string str7 = num.ToString();
+                    registryKey8.SetValue("WallpaperStyle", (object)str7);
+                    RegistryKey registryKey9 = registryKey1;
+                    num = 1;
+                    string str8 = num.ToString();
+                    registryKey9.SetValue("TileWallpaper", (object)str8);
+                }
+                else if (style == "Center")
+                {
+                    RegistryKey registryKey10 = registryKey1;
+                    int num = 0;
+                    string str9 = num.ToString();
+                    registryKey10.SetValue("WallpaperStyle", (object)str9);
+                    RegistryKey registryKey11 = registryKey1;
+                    num = 0;
+                    string str10 = num.ToString();
+                    registryKey11.SetValue("TileWallpaper", (object)str10);
+                }
+                else if (style == "Span")
+                {
+                    RegistryKey registryKey12 = registryKey1;
+                    int num = 22;
+                    string str11 = num.ToString();
+                    registryKey12.SetValue("WallpaperStyle", (object)str11);
+                    RegistryKey registryKey13 = registryKey1;
+                    num = 0;
+                    string str12 = num.ToString();
+                    registryKey13.SetValue("TileWallpaper", (object)str12);
+                }
+                else
+                {
+                    ErrorMessage = "Wallpaper fitting option not recognized. Please choose another.";
+                    IsError = true;
+
+
+                }
+                Wallpaper.SystemParametersInfo(20, 0, lpvParam, 3);
+            }
+        }
+
+        public enum Style
+        {
+            Tiled,
+            Centered,
+            Stretched,
+        }
     }
 }
