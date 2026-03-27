@@ -74,6 +74,7 @@
             ForeColor = SystemColors.ControlLightLight;
             Name = "Form1";
             Text = "AquaCLI";
+            Load += Form1_Load;
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             ResumeLayout(false);

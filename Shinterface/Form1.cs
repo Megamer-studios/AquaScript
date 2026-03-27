@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Net;
 using System.Reflection.Emit;
+using System.Text.RegularExpressions;
 using static System.Windows.Forms.LinkLabel;
 using Label = System.Windows.Forms.Label;
 
@@ -11,11 +12,14 @@ namespace Shinterface
 
         List<Control> UserVariables = new List<Control>();
         bool wtf = false;
+        bool out1 = false;
+       public static string Out2 = "";
         public Form1(string[] args)
         {
             InitializeComponent();
-            if (args.Length >= 1) { 
-            HandleCommands("run " + args[1]).Wait();
+            if (args.Length >= 1)
+            {
+                HandleCommands("run " + args[1]).Wait();
             }
         }
 
@@ -44,14 +48,15 @@ namespace Shinterface
             if (e.KeyChar == (char)Keys.Enter && !string.IsNullOrEmpty(textBox1.Text))
             {
                 e.Handled = true;
-               await HandleCommands(textBox1.Text);
+                await HandleCommands(textBox1.Text);
             }
         }
 
         private async Task HandleCommands(string input)
         {
+            string raw = input.Trim();
             string command = input.Trim();
-            command = VariableHandler.HandleStrings(command);
+            command = HandleStrings(command);
             if (!string.IsNullOrEmpty(command))
             {
                 await NewLine(command, Color.Gray, null);
@@ -69,10 +74,11 @@ namespace Shinterface
                     {
                         await NewLine(command.Substring(4), null, null);
                     }
-                    catch (Exception ex) { 
-                    await NewLine(ex.Message, Color.Red, null);
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
                     }
-                   
+
                 }
                 else if (command == "hack")
                 {
@@ -106,10 +112,10 @@ namespace Shinterface
                 // -Projects-
                 else if (command == "projects")
                 {
-                    await NewLine(" Project categories:",null, null);
+                    await NewLine(" Project categories:", null, null);
                     await NewLine("[-]", Color.Red, null);
                     await NewLine("  \"projects aqua\" - projects owned by me", Color.Aquamarine, null);
-                    await NewLine("  \"projects ad\" - projects I've made for the Anti-Depressant Dev Team", Color.LightGreen, null);               
+                    await NewLine("  \"projects ad\" - projects I've made for the Anti-Depressant Dev Team", Color.LightGreen, null);
                     await NewLine("  \"projects mc\" - projects I've made for the Moscovium debloat software", Color.Purple, null);
                     await NewLine("  \"projects fr\" - projects I've made for the Freak-Lang development", Color.Pink, null);
                     await NewLine("[-]", Color.Red, null);
@@ -132,7 +138,7 @@ namespace Shinterface
                 else if (command == "projects ad")
                 {
                     await NewLine("Notepad-Plus-Minus https://github.com/Anti-Depressants-Dev-Team/Notepad-Plus-Minus", Color.LightGreen, null);
-                   
+
                 }
                 else if (command == "projects mc")
                 {
@@ -145,12 +151,12 @@ namespace Shinterface
                 {
                     await NewLine("FreakDocs https://freak-docs.vercel.app/", Color.Pink, null);
                     await NewLine("FREAK-Website https://freak-nine.vercel.app/", Color.Pink, null);
-                   
+
                 }
                 // -End Projects-
                 else if (command.StartsWith("run "))
                 {
-                    
+
                     try
                     {
                         string link = command.Substring(4);
@@ -159,12 +165,13 @@ namespace Shinterface
                         processStartInfo.UseShellExecute = true;
                         processStartInfo.FileName = link;
                         Process.Start(processStartInfo);
-                        await NewLine("Running: "+ link, Color.LightSkyBlue, null);
-                    }catch(Exception ex) 
-                    {
-                       await NewLine(ex.Message, Color.Red, null);
+                        await NewLine("Running: " + link, Color.LightSkyBlue, null);
                     }
-                   
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
 
 
                 }
@@ -176,11 +183,12 @@ namespace Shinterface
                         string link = command.Substring(10).Replace("\"", " ");
                         await NewLine("Running script: " + link, Color.LightSkyBlue, null);
                         string[] lines = File.ReadAllLines(link);
-                        
-                        foreach (string line in lines) { 
-                        await HandleCommands(line.Trim());
+
+                        foreach (string line in lines)
+                        {
+                            await HandleCommands(line.Trim());
                         }
-                       
+
                     }
                     catch (Exception ex)
                     {
@@ -207,7 +215,8 @@ namespace Shinterface
                         int wid = int.Parse(s2[1]);
                         int hei = int.Parse(s2[2]);
                         List<Control> controls = new List<Control>();
-                        foreach (string line in s2) {
+                        foreach (string line in s2)
+                        {
                             if (line.StartsWith("label-"))
                             {
                                 string text = line.Substring(6);
@@ -257,8 +266,8 @@ namespace Shinterface
                                 controls.AddRange(UserVariables);
                             }
                         }
-                        
-                        
+
+
                         //if (s1.Contains("button-"))
                         // {
                         //     string text = s2.Find(x => x.StartsWith("button-"));
@@ -270,7 +279,7 @@ namespace Shinterface
                         //     button.Height = 50;
                         //     controls.Add(button);
                         // }
-                     form.MaximizeBox = false;
+                        form.MaximizeBox = false;
                         form.Text = title;
                         form.Width = wid;
                         form.Height = hei;
@@ -314,7 +323,7 @@ namespace Shinterface
                     bool horizontalbo = false;
                     try
                     {
-                       
+
                         Form form = new Form();
                         string s1 = command.Substring(9);
                         List<string> s2 = s1.Split(" ").ToList();
@@ -395,7 +404,7 @@ namespace Shinterface
                         form.Text = title;
                         form.Width = wid;
                         form.Height = hei;
-                        
+
                         form.FormBorderStyle = FormBorderStyle.Fixed3D;
                         FlowLayoutPanel flowLayoutPanel2 = new FlowLayoutPanel();
                         flowLayoutPanel2.Dock = DockStyle.Fill;
@@ -416,9 +425,9 @@ namespace Shinterface
                         }
 
 
-                  
 
-                        form.Show(); 
+
+                        form.Show();
 
 
                         //await  CreateForm(title, wid, hei, controls);
@@ -450,7 +459,7 @@ namespace Shinterface
                     try
                     {
                         OpenFileDialog openFileDialog = new OpenFileDialog();
-                        
+
                         if (openFileDialog.ShowDialog() == DialogResult.OK)
                         {
                             string link = openFileDialog.FileName;
@@ -462,7 +471,7 @@ namespace Shinterface
                                 await HandleCommands(line.Trim());
                             }
                         }
-                       
+
 
                     }
                     catch (Exception ex)
@@ -485,29 +494,30 @@ namespace Shinterface
                     try
                     {
                         string s1 = command.Substring(8);
-                        string[] s2 = s1.Split(' ');
+                      
                         Button button = new Button();
                         button.Font = textBox1.Font;
-                        button.Text = s2[0].Replace("^", " ");
-                        button.Size = TextRenderer.MeasureText(s2[0], button.Font);
+                        button.Text = s1;
+                        button.Size = TextRenderer.MeasureText(s1, button.Font);
                         UserVariables.Add(button);
-                        
+
                     }
-                    catch (Exception ex) {
+                    catch (Exception ex)
+                    {
                         await NewLine(ex.Message, Color.Red, null);
                     }
-                    
+
                 }
                 else if (command.StartsWith("$label "))
                 {
                     try
                     {
                         string s1 = command.Substring(7);
-                        string[] s2 = s1.Split(' ');
+                     
                         Label label = new Label();
                         label.Font = textBox1.Font;
-                        label.Text = s2[0].Replace("^", " ");
-                        label.Size = TextRenderer.MeasureText(s2[0], label.Font);
+                        label.Text = s1;
+                        label.Size = TextRenderer.MeasureText(s1, label.Font);
                         UserVariables.Add(label);
 
                     }
@@ -517,6 +527,48 @@ namespace Shinterface
                     }
 
                 }
+                else if (command.StartsWith("$input "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(7);
+                       
+                        TextBox label = new TextBox();
+                        label.Font = textBox1.Font;
+                        label.Text = s1;
+                        label.Width = 100;
+                        label.TextChanged += (o, s) =>
+                        {
+                            label.Text = label.Text;
+                        };
+                        UserVariables.Add(label);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+                }
+                //else if (command.StartsWith("$num "))
+                //{
+                //    try
+                //    {
+                //        string s1 = command.Substring(5);
+                  
+                //        NumericUpDown label = new NumericUpDown();
+                //        label.Font = textBox1.Font;
+                //        label.Value = int.Parse(s1);
+                //        label.Width = 100;
+                //        UserVariables.Add(label);
+
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        await NewLine(ex.Message, Color.Red, null);
+                //    }
+
+                //}
                 else if (command.StartsWith("$image "))
                 {
                     try
@@ -524,8 +576,8 @@ namespace Shinterface
                         string s1 = command.Substring(7);
                         string[] s2 = s1.Split(' ');
                         PictureBox picture = new PictureBox();
-                      
-                        picture.Image = Image.FromFile(s2[0].Replace("\"", "").Replace("^"," "));
+
+                        picture.Image = Image.FromFile(s2[0].Replace("\"", "").Replace("^", " "));
                         picture.Width = picture.Image.Width;
                         picture.Height = picture.Image.Height;
                         UserVariables.Add(picture);
@@ -541,30 +593,32 @@ namespace Shinterface
                 {
                     try
                     {
-                        string s1 = command.Substring(3);
+                        string s1 = raw.Substring(3);
                         List<string> s2 = s1.Split(' ').ToList();
                         int a = int.Parse(s2[0]);
 
                         Button thisControl = (Button)UserVariables[a];
                         string arg = s1.Substring(s2[0].Length);
-                        
+
                         //s2.Remove(s2[0]);
                         //string arg ="";
                         //foreach (string s in s2)
                         //{
                         //    arg += s;
                         //}
-                       
+
                         List<string> cmnds = arg.Split(";").ToList();
 
-                        foreach (string cmnd in cmnds) {
-                          
+                        foreach (string cmnd in cmnds)
+                        {
+
                             await NewLine(cmnd, null, null);
                         }
                         thisControl.Click += async (o, s) =>
                         {
-                            foreach (string cmnd in cmnds) { 
-                            await HandleCommands(cmnd);
+                            foreach (string cmnd in cmnds)
+                            {
+                                await HandleCommands(cmnd);
                             }
                         };
                     }
@@ -572,9 +626,9 @@ namespace Shinterface
                     {
                         await NewLine(ex.Message, Color.Red, null);
                     }
-                   
 
-                    
+
+
 
 
                 }
@@ -597,11 +651,82 @@ namespace Shinterface
                         await NewLine(ex.Message, Color.Red, null);
                     }
                 }
+                // end usr var
+                else if (command.StartsWith("out "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(4);
+                        out1 = true;
+                        await HandleCommands(s1);
+                        out1 = false;
+                    }
+                    catch (Exception ex) {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+                  
+
+                }
+                else if (command.StartsWith("add "))
+                {try { 
+                    string[] s1 = command.Split(" ");
+                    int a = int.Parse(s1[1]);
+                    int b = int.Parse(s1[2]);
+                    int c = a + b;
+                    await NewLine(c.ToString(), null, null);
+                }
+                    catch (Exception ex) {
+                    await NewLine(ex.Message, Color.Red, null);
+                }
+
+            }
+                else if (command.StartsWith("sub "))
+                {
+                    try { 
+                    string[] s1 = command.Split(" ");
+                    int a = int.Parse(s1[1]);
+                    int b = int.Parse(s1[2]);
+                    int c = a - b;
+                    await NewLine(c.ToString(), null, null);
+                }
+                    catch (Exception ex) {
+                    await NewLine(ex.Message, Color.Red, null);
+                }
+
+            }
+                else if (command.StartsWith("div "))
+                {
+                    try { 
+                    string[] s1 = command.Split(" ");
+                    int a = int.Parse(s1[1]);
+                    int b = int.Parse(s1[2]);
+                    int c = a / b;
+                    await NewLine(c.ToString(), null, null);
+                }
+                    catch (Exception ex) {
+                    await NewLine(ex.Message, Color.Red, null);
+                }
+            }
+                else if (command.StartsWith("mul "))
+                {
+                    try { 
+                    string[] s1 = command.Split(" ");
+                    int a = int.Parse(s1[1]);
+                    int b = int.Parse(s1[2]);
+                    int c = a * b;
+                    await NewLine(c.ToString(), null, null);
+                }
+                    catch (Exception ex) {
+                    await NewLine(ex.Message, Color.Red, null);
+                }
+
+            }
                 else if (command == "usrvars")
                 {
                     foreach (var control in UserVariables)
                     {
-                        await NewLine( UserVariables.IndexOf(control).ToString() + " : "+control.ToString(), null, null);
+                        await NewLine(UserVariables.IndexOf(control).ToString() + " : " + control.ToString(), null, null);
                     }
                 }
                 else if (command == "clear-usrvars")
@@ -642,7 +767,7 @@ namespace Shinterface
             textBox.BorderStyle = BorderStyle.None;
             Size size = TextRenderer.MeasureText(textBox.Text, textBox.Font);
             textBox.Width = size.Width;
-            
+
             flowLayoutPanel1.Controls.Add(textBox);
             try
             {
@@ -654,14 +779,61 @@ namespace Shinterface
                     await NewLine(ex.Message, Color.Red, null);
                 }
             }
-           
+           if (out1)
+            {
+                Out2 = text;
+            }
+
+
+        }
+        public string HandleStrings(string a)
+        {
+            string FetchString = "   OS Platform : " + Environment.OSVersion.Platform.ToString() + "\n   OS Version : " + Environment.OSVersion.VersionString + "\n   OS SP : " + Environment.OSVersion.ServicePack + "\n   PC Name : " + Environment.MachineName + "\n   Is 64bit? : " + Environment.Is64BitOperatingSystem.ToString();
+            a = a.Replace("{osplatform}", Environment.OSVersion.Platform.ToString());
+            a = a.Replace("{osversion}", Environment.OSVersion.VersionString);
+            a = a.Replace("{osspm}", Environment.OSVersion.ServicePack);
+            a = a.Replace("{pcname}", Environment.MachineName.ToString());
+            a = a.Replace("{fetchresult}", FetchString);
+            a = a.Replace("{out}", Form1.Out2);
+
+            a = Regex.Replace(a, "\\{\\$\\s*(\\d+)\\s*\\}", match =>
+            {
+                if (int.TryParse(match.Groups[1].Value, out var idx) && idx >= 0 && idx < UserVariables.Count)
+                {
+                    return GetControlValue(UserVariables[idx]);
+                }
+                return match.Value;
+            });
+                return a;
         }
 
         private void flowLayoutPanel1_Click(object sender, EventArgs e)
         {
             textBox1.Focus();
         }
-        
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+        string GetControlValue(Control ctrl)
+        {
+            if (ctrl.InvokeRequired)
+            {
+                return (string)ctrl.Invoke(new Func<string>(() => GetControlValue(ctrl)));
+            }
+
+            switch (ctrl)
+            {
+                case TextBox tb: return tb.Text;
+                case Label lb: return lb.Text;
+                case Button btn: return btn.Text;
+                case CheckBox cb: return cb.Checked.ToString();
+                case NumericUpDown num: return num.Value.ToString();
+                case PictureBox pb: return pb.Tag?.ToString() ?? ""; // or some image-path storage
+                default: return ctrl.Text ?? string.Empty;
+            }
+        }
         //private async Task CreateForm(string title, int width, int height, List<Control>? controls)
         //{
         //    Form form = new Form();
@@ -682,7 +854,7 @@ namespace Shinterface
         //        }
         //        form.Controls.Add(flowLayoutPanel2);
         //    }
-           
+
         //    form.ShowDialog();
         //}
     }
