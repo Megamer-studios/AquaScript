@@ -21,13 +21,10 @@ namespace Shinterface
         string last;
         string out2 = "";
         string res = "";
-        public Form1(string[] args)
+        public Form1()
         {
             InitializeComponent();
-            if (args.Length >= 1)
-            {
-                HandleCommands("run " + args[1]).Wait();
-            }
+        
 
         }
 
@@ -283,6 +280,7 @@ namespace Shinterface
                         }
 
 
+
                         //if (s1.Contains("button-"))
                         // {
                         //     string text = s2.Find(x => x.StartsWith("button-"));
@@ -484,6 +482,7 @@ namespace Shinterface
             }
                 else if (command.StartsWith("wlp-stretch "))
                 {try { 
+
                     string s1 = command.Substring(12);
                     Wallpaper.Set(s1.Replace('"', ' '), "Stretch");
                     await NewLine("Wallpaper(stretch) set to : " + s1, null, null);
@@ -1021,10 +1020,6 @@ namespace Shinterface
         }
         string GetControlValue(Control ctrl)
         {
-            if (ctrl.InvokeRequired)
-            {
-                return (string)ctrl.Invoke(new Func<string>(() => GetControlValue(ctrl)));
-            }
 
             switch (ctrl)
             {
