@@ -14,6 +14,8 @@ namespace Shinterface
     {
 
         List<Control> UserVariables = new List<Control>();
+        List<string> UserStrings = new List<string>();
+        List<int> UserInts = new List<int>();
         bool wtf = false;
         bool out1 = false;
         string last;
@@ -567,6 +569,38 @@ namespace Shinterface
 
                 }
                 // User-variables
+                else if (command.StartsWith("#string "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(8);
+                        string blya = s1;
+                        UserStrings.Add(blya);
+                   
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+                }
+                else if (command.StartsWith("#int "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(5);
+                        int blya = int.Parse(s1);
+                        UserInts.Add(blya);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+                }
                 else if (command.StartsWith("$button "))
                 {
                     try
@@ -721,6 +755,42 @@ namespace Shinterface
                         Label thisControl = (Label)UserVariables[a];
                         thisControl.Text = s1.Substring(s2[0].Length); ;
                         thisControl.Size = TextRenderer.MeasureText(thisControl.Text, thisControl.Font);
+                    }
+
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+                }
+                else if (command.StartsWith("#s-"))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(3);
+                        List<string> s2 = s1.Split(' ').ToList();
+                        int a = int.Parse(s2[0]);
+
+                        UserStrings[a] = s1.Substring(s2[0].Length);
+
+
+                    }
+
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+                }
+                else if (command.StartsWith("#i-"))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(3);
+                        List<string> s2 = s1.Split(' ').ToList();
+                        int a = int.Parse(s2[0]);
+
+                        UserInts[a] = int.Parse(s1.Substring(s2[0].Length));
+
+
                     }
 
                     catch (Exception ex)
@@ -896,6 +966,22 @@ namespace Shinterface
                 if (int.TryParse(match.Groups[1].Value, out var idx) && idx >= 0 && idx < UserVariables.Count)
                 {
                     return GetControlValue(UserVariables[idx]);
+                }
+                return match.Value;
+            });
+            a = Regex.Replace(a, "\\{\\#s\\s*(\\d+)\\s*\\}", match =>
+            {
+                if (int.TryParse(match.Groups[1].Value, out var idx) && idx >= 0 && idx < UserStrings.Count)
+                {
+                    return UserStrings[idx];
+                }
+                return match.Value;
+            });
+            a = Regex.Replace(a, "\\{\\#i\\s*(\\d+)\\s*\\}", match =>
+            {
+                if (int.TryParse(match.Groups[1].Value, out var idx) && idx >= 0 && idx < UserInts.Count)
+                {
+                    return UserInts[idx].ToString();
                 }
                 return match.Value;
             });
