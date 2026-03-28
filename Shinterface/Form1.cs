@@ -897,6 +897,28 @@ namespace Shinterface
                 {
                     UserVariables.Clear();
                 }
+                else if (command == "strings")
+                {
+                    foreach (var control in UserStrings)
+                    {
+                        await NewLine(UserStrings.IndexOf(control).ToString() + " : " + control, null, null);
+                    }
+                }
+                else if (command == "clear-strings")
+                {
+                    UserStrings.Clear();
+                }
+                else if (command == "ints")
+                {
+                    foreach (var control in UserInts)
+                    {
+                        await NewLine(UserInts.IndexOf(control).ToString() + " : " + control.ToString(), null, null);
+                    }
+                }
+                else if (command == "clear-ints")
+                {
+                    UserInts.Clear();
+                }
                 else
                 {
                     await NewLine($"The command '{command}' is not recognized as a command!", Color.Red, Color.White);
