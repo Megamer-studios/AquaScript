@@ -18,6 +18,7 @@ namespace Shinterface
         bool out1 = false;
         string last;
         string out2 = "";
+        string res = "";
         public Form1(string[] args)
         {
             InitializeComponent();
@@ -872,6 +873,7 @@ namespace Shinterface
                     await NewLine(ex.Message, Color.Red, null);
                 }
             }
+            res = text;
             if (out1)
             {
                 out2 = text;
@@ -888,7 +890,7 @@ namespace Shinterface
             a = a.Replace("{pcname}", Environment.MachineName.ToString());
             a = a.Replace("{fetchresult}", FetchString);
             a = a.Replace("{out}", out2);
-
+            a = a.Replace("{res}", res);
             a = Regex.Replace(a, "\\{\\$\\s*(\\d+)\\s*\\}", match =>
             {
                 if (int.TryParse(match.Groups[1].Value, out var idx) && idx >= 0 && idx < UserVariables.Count)
