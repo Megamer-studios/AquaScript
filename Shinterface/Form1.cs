@@ -22,6 +22,7 @@ namespace Shinterface
         string out2 = "";
         string res = "";
         bool ifelse = false;
+        bool echo = true;
         public Form1()
         {
             InitializeComponent();
@@ -72,7 +73,10 @@ namespace Shinterface
             command = HandleStrings(command);
             if (!string.IsNullOrEmpty(command))
             {
-                await NewLine(command, Color.Gray, null);
+                if (echo)
+                {
+                    await NewLine(command, Color.Gray, null);
+                }
                 if (command == "greet")
                 {
                     await NewLine("Greetings World!", null, null);
@@ -80,6 +84,16 @@ namespace Shinterface
                 else if (command == "hello world")
                 {
                     await NewLine("Hello World!", null, null);
+                }
+                else if (command == "echo-on")
+                {
+                    echo = true;
+                    await NewLine("Turned on echo", null, null);
+                }
+                else if (command == "echo-off")
+                {
+                    echo = false;
+                    await NewLine("Turned off echo", null, null);
                 }
                 else if (command.StartsWith("say "))
                 {
