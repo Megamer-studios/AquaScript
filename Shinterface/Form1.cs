@@ -21,6 +21,7 @@ namespace Shinterface
         string last;
         string out2 = "";
         string res = "";
+        bool ifelse = false;
         public Form1()
         {
             InitializeComponent();
@@ -91,6 +92,39 @@ namespace Shinterface
                         await NewLine(ex.Message, Color.Red, null);
                     }
 
+                }
+                else if (command.StartsWith("say-c-"))
+                {
+                    try
+                    {
+                        string[] s1 = command.Split(" ");
+                        string s3 = s1[0].Substring(6);
+                        Color color = Color.FromName(s3);
+                        string s2 = command.Substring(s1[0].Length);
+                        await NewLine(s2, color, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+                }
+                else if (command == "colours")
+                {
+                    try
+                    {
+                        KnownColor[] colors = Enum.GetValues<KnownColor>();
+                        foreach (KnownColor knowColor in colors)
+                        {
+                            Color color = Color.FromKnownColor(knowColor);
+                            await NewLine(knowColor.ToString(), color, null);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+                 
                 }
                 else if (command == "hack")
                 {
@@ -186,8 +220,7 @@ namespace Shinterface
 
 
 
-                }
-                // Gotta keep the streak
+                }     
                 else if (command.StartsWith("runscript "))
                 {
 
