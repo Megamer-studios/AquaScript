@@ -1,39 +1,140 @@
-  IN DEVELOPMENT
+  # IN DEVELOPMENT
 
+# AquaScript (WEB SECTION) 
 
-  Server architecture -> for web hosting (also works standalone)
+Hosting documentation for AquaScript (WEB)
 
-  index.asq <main page (name is optional)>
+AquaScript is not just for web!
 
-  env.asv <basic variables file to define program name and ip)
+[GitHub](https://github.com/Megamer-studios/AquaScript)
 
-  about.asq (form to display information about the program) <optional>
+---
 
-  --------- env.asv structure --------
+## Download
 
-  IP
-  
-  NAME
-  
-  AUTHOR
-  
-  VERSION
-  
-  DESCRIPTION
+[Download AquaScript](https://github.com/Megamer-studios/AquaScript/releases/tag/PreRelease-Web)
 
-  --------- Example ------------------
+---
 
-  http://192.168.1.131
-  
-  AquaHosted
-  
-  Akumarin Kukino
-  
-  EARLY PROTOTYPE
-  
-  A simple script environment hosted on Apache.
+### Example script
 
+```
+hidecli
+// Hides the command interface
+clear-usrvars
+// Clears user variables 
+$button Add
+// Declares the 1st user variable(button) with the text "Add"
+$button Subtract
+// Declares the 2nd user variable(button) with the text "Subtract"
+$button Divide
+// Declares the 3rd user variable(button) with the text "Divide"
+$button Multiply
+// Declares the 4th user variable(button) with the text "Multiply"
+$label Result:
+// Declares the 5th user variable(label) with the text "Result"
+$input 0
+// Declares the 6th user variable(input) with the text "0"
+$input 0
+// Declares the 7th user variable(input) with the text "0"
+$b-0 out add {$5} {$6}; $l-4 Result: {out};
+// Sets the 1st user variable(button)'s click property to -
+// runs the 'out' command setting the output variable to the result of the 'add'  command
+// using the text from the 6th(input) and 7th(input) user variables
+// (-1 in the code because index starts from 0)
+// and then sets the text of the 5th user variable(label) to "Result: " + the output variable
+$b-1 out sub {$5} {$6}; $l-4 Result: {out};
+// Sets the 2nd user variable(button)'s click property to -
+// runs the 'out' command setting the output variable to the result of the 'sub'  command
+// using the text from the 6th(input) and 7th(input) user variables
+// (-1 in the code because index starts from 0)
+// and then sets the text of the 5th user variable(label) to "Result: " + the output variable
+$b-2 out div {$5} {$6}; $l-4 Result: {out};
+// Sets the 2nd user variable(button)'s click property to -
+// runs the 'out' command setting the output variable to the result of the 'div'  command
+// using the text from the 6th(input) and 7th(input) user variables
+// (-1 in the code because index starts from 0)
+// and then sets the text of the 5th user variable(label) to "Result: " + the output variable
+$b-3 out mul {$5} {$6}; $l-4 Result: {out};
+// Sets the 2nd user variable(button)'s click property to -
+// runs the 'out' command setting the output variable to the result of the 'mul'  command
+// using the text from the 6th(input) and 7th(input) user variables
+// (-1 in the code because index starts from 0)
+// and then sets the text of the 5th user variable(label) to "Result: " + the output variable
+basicform Calculator^Sigma 500 500 vars
+// Creates a 'basicform' 
+// Sets the window title to 'Calculator Sigma' " (^) is replaced by a space in the code"
+// sets the width to 500 pixels
+// sets the height to 500 pixels
+// 'vars' tells the window to include the user variables in the controls
+showcli
+// unhides the command interface
+clear-usrvars
+// clears the user variables
+```
 
---------------------------------------
+---
 
-You can just host a server with Apache you just need to host the asq files
+### Example program
+
+[Index file](index.asq)
+
+### How to run it:
+
+1) Run the exe
+
+2) Enter the command `runscript-web http://192.168.1.131/index.asq`
+
+---
+
+## Server architecture
+
+#### index.asq - main page
+
+#### env.asv - program definition
+
+#### about.asq - about page
+
+---
+
+## Definition structure
+
+#### IP
+
+#### Name
+
+#### Author
+
+#### Version
+
+#### Description
+
+---
+
+## Definition example
+
+```
+http://192.168.1.131
+AquaHosted
+Akumarin Kukino
+EARLY PROTOTYPE
+A simple script environment hosted on Apache.
+```
+
+---
+
+## Hosting
+
+You can just host it on Apache. It doesn't matter just make the files accessible through the web server.
+
+---
+
+## Files:
+
+[Index file](index.asq) [About file](about.asq) [Another page](inteOne.asq) [Sequence page](inteTwo.asq) [Media](Media) [Definiton](env.asv)
+
+---
+
+```
+ Copyright (c) 2026 AquaScript. All rights reserved. - Akumarin Kukino - Megamer Studios
+```
