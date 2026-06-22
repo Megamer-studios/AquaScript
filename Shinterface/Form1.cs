@@ -391,7 +391,7 @@ namespace Shinterface
 
                         form.ShowDialog(); // command handling is supressed until the form is closed
 
-                        /* form.Show();*/ // uncomment this line and comment line 282 for chaos!
+                        /* form.Show();*/ // uncomment this line and comment the line above for chaos!
 
 
                         //await  CreateForm(title, wid, hei, controls);
@@ -613,6 +613,23 @@ namespace Shinterface
                     await NewLine("Unhid the terminal", null, null);
 
                 }
+                else if (command.StartsWith("get-text "))
+                {
+              string s1 = command.Substring(9);
+                    await NewLine(File.ReadAllText(s1), null, null);
+
+                }
+                else if (command.StartsWith("get-text-lines "))
+                {
+                    string s1 = command.Substring(15);
+                    string[] lines = File.ReadAllLines(s1);
+                    foreach (string line in lines)
+                    {
+                        await NewLine(line, null, null);
+                    }
+
+
+                }
                 else if (command == "runscript-gui")
                 {
 
@@ -771,6 +788,27 @@ namespace Shinterface
                         PictureBox picture = new PictureBox();
 
                         picture.Image = Image.FromFile(s2[0].Replace("\"", "").Replace("^", " "));
+                        picture.Width = picture.Image.Width;
+                        picture.Height = picture.Image.Height;
+                        UserVariables.Add(picture);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+                }
+                else if (command.StartsWith("$imageweb "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(10);
+             HttpClient client = new HttpClient();
+
+                        PictureBox picture = new PictureBox();
+                        Image image = Image.FromStream(await client.GetStreamAsync(s1));
+                        picture.Image = image;
                         picture.Width = picture.Image.Width;
                         picture.Height = picture.Image.Height;
                         UserVariables.Add(picture);
