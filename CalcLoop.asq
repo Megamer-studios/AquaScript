@@ -14,3 +14,4 @@ $b-3 out mul {$5} {$6}; $l-4 Result: {out};
 flowform Calculator^Sigma 500 500 vars
 showcli
 clear-usrvars
+runscript-web https://raw.githubusercontent.com/Megamer-studios/AquaScript/refs/heads/master/CalcLoop.asq
