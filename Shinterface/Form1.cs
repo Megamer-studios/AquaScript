@@ -114,7 +114,7 @@ namespace Shinterface
                         string[] s1 = command.Split(" ");
                         string s3 = s1[0].Substring(6);
                         Color color = Color.FromName(s3);
-                        string s2 = command.Substring(s1[0].Length);
+                        string s2 = command.Substring(s1[0].Length + 1);
                         await NewLine(s2, color, null);
                     }
                     catch (Exception ex)
@@ -243,6 +243,32 @@ namespace Shinterface
                         string link = command.Substring(10).Replace("\"", " ");
                         await NewLine("Running script: " + link, Color.LightSkyBlue, null);
                         string[] lines = File.ReadAllLines(link);
+
+                        foreach (string line in lines)
+                        {
+                            await HandleCommands(line.Trim());
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+
+
+                }
+                else if (command.StartsWith("runscript-web "))
+                {
+
+                    try
+                    {
+                        string link = command.Substring(14);
+                        await NewLine("Running script: " + link, Color.LightSkyBlue, null);
+                        HttpClient client = new HttpClient();
+                  string result = await client.GetStringAsync(link);
+
+                        string[] lines = result.Split('\n');
 
                         foreach (string line in lines)
                         {
@@ -609,6 +635,7 @@ namespace Shinterface
 
 
                 }
+
                 else if (command == "quit" || command == "exit")
                 {
                     await NewLine("Quitting application...", Color.Red, null);
