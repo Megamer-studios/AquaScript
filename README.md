@@ -12,18 +12,27 @@
   --------- env.asv structure --------
 
   IP
+  
   NAME
+  
   AUTHOR
+  
   VERSION
+  
   DESCRIPTION
 
   --------- Example ------------------
 
   http://192.168.1.131
+  
   AquaHosted
+  
   Akumarin Kukino
+  
   EARLY PROTOTYPE
+  
   A simple script environment hosted on Apache.
+
 
 --------------------------------------
 
