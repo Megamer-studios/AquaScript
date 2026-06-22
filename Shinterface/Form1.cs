@@ -23,6 +23,11 @@ namespace Shinterface
         string res = "";
         bool ifelse = false;
         bool echo = true;
+        string ip = "";
+        string prgmName = "";
+        string prgmVersion = "";
+        string prgmAuthor = "";
+        string prgmDesc = "";
         public Form1()
         {
             InitializeComponent();
@@ -863,6 +868,46 @@ namespace Shinterface
 
 
                 }
+                else if (command.StartsWith("$img-"))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(5);
+                        List<string> s2 = s1.Split(' ').ToList();
+                        int a = int.Parse(s2[0]);
+
+                        PictureBox thisControl = (PictureBox)UserVariables[a];
+                        thisControl.Image = Image.FromFile(s1.Substring(s2[0].Length).Replace("\"", "").Replace("^", " "));
+                        thisControl.Width = thisControl.Image.Width;
+                        thisControl.Height = thisControl.Image.Height;
+                    }
+
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+                }
+                else if (command.StartsWith("$imgweb-"))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(8);
+                        List<string> s2 = s1.Split(' ').ToList();
+                        int a = int.Parse(s2[0]);
+                       
+                        HttpClient client = new HttpClient();
+                        PictureBox thisControl = (PictureBox)UserVariables[a];
+                        Image image = Image.FromStream(await client.GetStreamAsync(s1.Substring(s2[0].Length)));
+                        thisControl.Image = image;
+                        thisControl.Width = thisControl.Image.Width;
+                        thisControl.Height = thisControl.Image.Height;
+                    }
+
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+                }
                 else if (command.StartsWith("$l-"))
                 {
                     try
@@ -1005,12 +1050,81 @@ namespace Shinterface
                     }
 
                 }
+                else if (command.StartsWith("env-util "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(9);
+                        HttpClient client = new HttpClient();
+                        string result = await client.GetStringAsync(s1);
+                        string[] lines = result.Split('\n');
+
+                      
+                        ip = lines[0];
+                        prgmName = lines[1];
+                        prgmAuthor = lines[2];
+                        prgmVersion = lines[3];
+                        prgmDesc = lines[4];
+                        await NewLine("IP : " + ip, null, null);
+                        await NewLine("Program Name : " + prgmName, null, null);
+                        await NewLine("Program Author : " + prgmAuthor, null, null);
+                        await NewLine("Program Version : " + prgmVersion, null, null);
+                        await NewLine("Program Description : " + prgmDesc, null, null);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+                }
+                else if (command == ("env-clear"))
+                {
+                    try
+                    {
+                
+
+                       
+                        ip = string.Empty;
+                        prgmName = string.Empty;
+                        prgmAuthor = string.Empty;
+                        prgmVersion = string.Empty;
+                        prgmDesc = string.Empty;
+        
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+                }
                 else if (command == "usrvars")
                 {
                     foreach (var control in UserVariables)
                     {
                         await NewLine(UserVariables.IndexOf(control).ToString() + " : " + control.ToString(), null, null);
                     }
+                }
+                else if (command == "clear-all")
+                {
+                    UserVariables.Clear();
+                    UserStrings.Clear();
+                    UserInts.Clear();
+                    res = String.Empty;
+                    out2 = String.Empty;
+                    ip = String.Empty;
+                    prgmAuthor = String.Empty;
+                    prgmName = String.Empty;
+                    prgmDesc = String.Empty;
+                    prgmVersion = String.Empty;
+                }
+                else if (command == "clear-within")
+                {
+                    UserVariables.Clear();
+                    UserStrings.Clear();
+                    UserInts.Clear();
+             
                 }
                 else if (command == "clear-usrvars")
                 {
@@ -1102,6 +1216,11 @@ namespace Shinterface
             a = a.Replace("{fetchresult}", FetchString);
             a = a.Replace("{out}", out2);
             a = a.Replace("{res}", res);
+            a = a.Replace("{ip}", ip);
+            a = a.Replace("{name}", prgmName);
+            a = a.Replace("{ver}", prgmVersion);
+            a = a.Replace("{auth}", prgmAuthor);
+            a = a.Replace("{desc}", prgmDesc);
             a = Regex.Replace(a, "\\{\\$\\s*(\\d+)\\s*\\}", match =>
             {
                 if (int.TryParse(match.Groups[1].Value, out var idx) && idx >= 0 && idx < UserVariables.Count)
