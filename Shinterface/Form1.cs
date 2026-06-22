@@ -405,6 +405,13 @@ namespace Shinterface
 
 
                 }
+                else if (command.StartsWith("interrupt "))
+                {
+                    string s1 = command.Substring(10);
+                    await NewLine("Interrupting for " + s1 + " milliseconds...", Color.Red, null);
+                    Thread.Sleep(int.Parse(s1));
+                    await NewLine("Interruption over!", Color.Green, null);
+                }
                 else if (command.StartsWith("flowform "))
                 {
                     bool horizontalbo = false;
