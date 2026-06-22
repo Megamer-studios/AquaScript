@@ -6,8 +6,6 @@ Hosting documentation for AquaScript (WEB)
 
 AquaScript is not just for web!
 
-[GitHub](https://github.com/Megamer-studios/AquaScript)
-
 ---
 
 ## Download
@@ -75,15 +73,11 @@ clear-usrvars
 
 ---
 
-### Example program
-
-[Index file](index.asq)
-
 ### How to run it:
 
 1) Run the exe
 
-2) Enter the command `runscript-web http://192.168.1.131/index.asq`
+2) Enter the command `runscript-web {ip}/index.asq`
 
 ---
 
@@ -126,12 +120,6 @@ A simple script environment hosted on Apache.
 ## Hosting
 
 You can just host it on Apache. It doesn't matter just make the files accessible through the web server.
-
----
-
-## Files:
-
-[Index file](index.asq) [About file](about.asq) [Another page](inteOne.asq) [Sequence page](inteTwo.asq) [Media](Media) [Definiton](env.asv)
 
 ---
 
