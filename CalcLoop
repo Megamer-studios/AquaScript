@@ -1,0 +1,16 @@
+hidecli
+clear-usrvars
+$button Add
+$button Subtract
+$button Divide
+$button Multiply
+$label Result:
+$input 0
+$input 0
+$b-0 out add {$5} {$6}; $l-4 Result: {out};
+$b-1 out sub {$5} {$6}; $l-4 Result: {out};
+$b-2 out div {$5} {$6}; $l-4 Result: {out};
+$b-3 out mul {$5} {$6}; $l-4 Result: {out};
+flowform Calculator^Sigma 500 500 vars
+showcli
+clear-usrvars
