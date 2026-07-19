@@ -4,9 +4,11 @@ using System.Drawing.Imaging;
 using System.Net;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using static System.Windows.Forms.LinkLabel;
 using Label = System.Windows.Forms.Label;
+using System.Text.Json.Nodes;
 
 namespace Shinterface
 {
@@ -28,6 +30,9 @@ namespace Shinterface
         string prgmVersion = "";
         string prgmAuthor = "";
         string prgmDesc = "";
+        string basestr = "";
+        string pathstr = "";
+
         public Form1()
         {
             InitializeComponent();
@@ -219,12 +224,12 @@ namespace Shinterface
 
                 }
                 // -End Projects-
-                else if (command.StartsWith("run "))
+                else if (command.StartsWith("runps "))
                 {
 
                     try
                     {
-                        string link = command.Substring(4);
+                        string link = command.Substring(6);
                         ProcessStartInfo processStartInfo = new ProcessStartInfo();
                         processStartInfo.CreateNoWindow = true;
                         processStartInfo.UseShellExecute = true;
@@ -239,7 +244,28 @@ namespace Shinterface
 
 
 
-                }     
+                }
+                else if (command.StartsWith("exec "))
+                {
+
+                    try
+                    {
+                        string link = command.Substring(5);
+                        ProcessStartInfo psi = new ProcessStartInfo();
+                        psi.Arguments = $"/c {link}";
+                        psi.FileName = "cmd.exe";
+                        Process.Start(psi);
+                        await NewLine("Running: " + link, Color.LightSkyBlue, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+
+
+                }
+              
                 else if (command.StartsWith("runscript "))
                 {
 
@@ -1118,6 +1144,13 @@ namespace Shinterface
                     prgmName = String.Empty;
                     prgmDesc = String.Empty;
                     prgmVersion = String.Empty;
+                    basestr = String.Empty;
+                    pathstr = String.Empty;
+                }
+                else if (command == "clear-http")
+                {
+                    basestr = String.Empty;
+                    pathstr = String.Empty;
                 }
                 else if (command == "clear-within")
                 {
@@ -1152,6 +1185,55 @@ namespace Shinterface
                 {
                     UserInts.Clear();
                 }
+                // HTTP
+                else if (command.StartsWith("basestr "))
+                {
+                    string s1 = command.Substring(8);
+                  basestr = s1;
+                    await NewLine("Base string set to : " + basestr, null, null);
+                }
+                else if (command.StartsWith("pathstr "))
+                {
+                    string s1 = command.Substring(8);
+                    pathstr = s1;
+                    await NewLine("Path string set to : " + pathstr, null, null);
+                }
+                else if  (command.StartsWith("post "))
+                {
+                    try { 
+                    string s1 = command.Substring(5).Trim().TrimStart('\uFEFF', '\u200B', '\u200D', '\uFEFE');
+
+      
+                      var content = new StringContent(s1, System.Text.Encoding.UTF8, "application/json");
+                       HttpClient client = new HttpClient();
+                      var response = await client.PostAsync(basestr + pathstr, content);
+                     var responseString = await response.Content.ReadAsStringAsync();
+
+                    await NewLine(responseString, null, null);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        await NewLine(ex.Message, Color.Red, null);
+                    }
+
+                }
+                else if (command == "get")
+                {
+                    try
+                    {
+                        HttpClient client = new HttpClient();
+
+                        var response = await client.GetAsync(basestr + pathstr);
+                        var responseString = await response.Content.ReadAsStringAsync();
+                        await NewLine(responseString, null, null);
+                    }
+                    catch (Exception ex){ 
+                    
+                    await NewLine(ex.Message, Color.Red, null);
+                    }
+                }
+              
                 else
                 {
                     await NewLine($"The command '{command}' is not recognized as a command!", Color.Red, Color.White);
@@ -1211,7 +1293,7 @@ namespace Shinterface
             string FetchString = "   OS Platform : " + Environment.OSVersion.Platform.ToString() + "\n   OS Version : " + Environment.OSVersion.VersionString + "\n   OS SP : " + Environment.OSVersion.ServicePack + "\n   PC Name : " + Environment.MachineName + "\n   Is 64bit? : " + Environment.Is64BitOperatingSystem.ToString();
             a = a.Replace("{osplatform}", Environment.OSVersion.Platform.ToString());
             a = a.Replace("{osversion}", Environment.OSVersion.VersionString);
-            a = a.Replace("{osspm}", Environment.OSVersion.ServicePack);
+            a = a.Replace("{ossp}", Environment.OSVersion.ServicePack);
             a = a.Replace("{pcname}", Environment.MachineName.ToString());
             a = a.Replace("{fetchresult}", FetchString);
             a = a.Replace("{out}", out2);
@@ -1221,6 +1303,8 @@ namespace Shinterface
             a = a.Replace("{ver}", prgmVersion);
             a = a.Replace("{auth}", prgmAuthor);
             a = a.Replace("{desc}", prgmDesc);
+            a = a.Replace("{basestr}", basestr);
+            a = a.Replace("{pathstr}", pathstr);
             a = Regex.Replace(a, "\\{\\$\\s*(\\d+)\\s*\\}", match =>
             {
                 if (int.TryParse(match.Groups[1].Value, out var idx) && idx >= 0 && idx < UserVariables.Count)
