@@ -32,7 +32,7 @@ namespace Shinterface
         string prgmDesc = "";
         string basestr = "";
         string pathstr = "";
-
+        bool showError = false;
         public Form1()
         {
             InitializeComponent();
@@ -113,7 +113,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -129,7 +129,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -146,7 +146,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
                  
                 }
@@ -239,7 +239,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
 
@@ -259,7 +259,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
 
@@ -283,7 +283,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
 
@@ -309,7 +309,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
 
@@ -430,7 +430,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
 
@@ -560,7 +560,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message , null);
                     }
 
 
@@ -577,7 +577,7 @@ namespace Shinterface
                     }
                     catch (Exception ex) {
 
-                        await NewLine(ex.Message, null, null);
+                        await ThrowError(ex.Message, null);
                             }
                    
                 }
@@ -589,7 +589,7 @@ namespace Shinterface
                 }
                     catch (Exception ex) {
 
-                    await NewLine(ex.Message, null, null);
+                    await ThrowError(ex.Message, null);
                 }
             }
                 else if (command.StartsWith("wlp-stretch "))
@@ -601,7 +601,7 @@ namespace Shinterface
                 }
                     catch (Exception ex) {
 
-                    await NewLine(ex.Message, null, null);
+                    await ThrowError(ex.Message, null);
                 }
             }
                 else if (command.StartsWith("wlp-tile "))
@@ -612,7 +612,7 @@ namespace Shinterface
                 }
                     catch (Exception ex) {
 
-                    await NewLine(ex.Message, null, null);
+                    await ThrowError(ex.Message, null);
                 }
             }
                 else if (command.StartsWith("wlp-span "))
@@ -624,7 +624,7 @@ namespace Shinterface
                 }
                     catch (Exception ex) {
 
-                    await NewLine(ex.Message, null, null);
+                    await ThrowError(ex.Message, null);
                 }
             }
                 // -Wallpaper -end
@@ -684,7 +684,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
 
@@ -710,7 +710,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -726,7 +726,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -745,7 +745,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -764,7 +764,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -787,7 +787,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -826,7 +826,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -847,7 +847,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -886,7 +886,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
 
@@ -910,7 +910,7 @@ namespace Shinterface
 
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
                 }
                 else if (command.StartsWith("$imgweb-"))
@@ -931,7 +931,7 @@ namespace Shinterface
 
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
                 }
                 else if (command.StartsWith("$l-"))
@@ -949,7 +949,7 @@ namespace Shinterface
 
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
                 }
                 else if (command.StartsWith("#s-"))
@@ -967,7 +967,7 @@ namespace Shinterface
 
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
                 }
                 else if (command.StartsWith("#i-"))
@@ -985,7 +985,7 @@ namespace Shinterface
 
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
                 }
                 // end usr var
@@ -1000,7 +1000,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
 
@@ -1025,7 +1025,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -1041,7 +1041,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -1057,7 +1057,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
                 }
                 else if (command.StartsWith("mul "))
@@ -1072,7 +1072,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -1100,7 +1100,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -1121,7 +1121,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -1208,13 +1208,18 @@ namespace Shinterface
                        HttpClient client = new HttpClient();
                       var response = await client.PostAsync(basestr + pathstr, content);
                      var responseString = await response.Content.ReadAsStringAsync();
-
-                    await NewLine(responseString, null, null);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            await NewLine(responseString, null, null);
+                        }
+                        else {
+                            await ThrowError(responseString, null);
+                        }
                     }
                     catch (Exception ex)
                     {
 
-                        await NewLine(ex.Message, Color.Red, null);
+                        await ThrowError(ex.Message, null);
                     }
 
                 }
@@ -1226,17 +1231,32 @@ namespace Shinterface
 
                         var response = await client.GetAsync(basestr + pathstr);
                         var responseString = await response.Content.ReadAsStringAsync();
-                        await NewLine(responseString, null, null);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            await NewLine(responseString, null, null);
+                        }
+                        else
+                        {
+                            await ThrowError(responseString, null);
+                        }
                     }
                     catch (Exception ex){ 
                     
-                    await NewLine(ex.Message, Color.Red, null);
+                    await ThrowError(ex.Message, null);
                     }
                 }
-              
+                // Errors
+                else if (command == "err-on")
+                {
+                    showError = true;
+                }
+                else if (command == "err-off")
+                {
+                    showError = false;
+                }
                 else
                 {
-                    await NewLine($"The command '{command}' is not recognized as a command!", Color.Red, Color.White);
+                    await ThrowError($"The command '{command}' is not recognized as a command!", Color.White);
                 }
                 textBox1.Text = string.Empty;
 
@@ -1277,7 +1297,7 @@ namespace Shinterface
             catch (Exception ex)
             {
                 {
-                    await NewLine(ex.Message, Color.Red, null);
+                    await ThrowError(ex.Message, null);
                 }
             }
             res = text;
@@ -1285,6 +1305,54 @@ namespace Shinterface
             {
                 out2 = text;
             }
+
+
+        }
+        private async Task ThrowError(string text, Color? back)
+        {
+            if (wtf)
+            {
+                Application.Exit();
+                this.Close();
+                Debug.Close();
+            }
+            TextBox textBox = new TextBox();
+            textBox.Text = text;
+            textBox.Font = textBox1.Font;
+            textBox.ForeColor = Color.Red;
+            textBox.BackColor = textBox1.BackColor;
+
+            if (back != null)
+            {
+                textBox.BackColor = (Color)back;
+            }
+
+            textBox.TextChanged += textBox1_TextChanged;
+            textBox.BorderStyle = BorderStyle.None;
+            Size size = TextRenderer.MeasureText(textBox.Text, textBox.Font);
+            textBox.Width = size.Width;
+
+            flowLayoutPanel1.Controls.Add(textBox);
+            try
+            {
+                flowLayoutPanel1.Controls.SetChildIndex(textBox1, flowLayoutPanel1.Controls.Count);
+            }
+            catch (Exception ex)
+            {
+                {
+                    await ThrowError(ex.Message, null);
+                }
+            }
+            if (showError)
+            {
+                MessageBox.Show(text);
+            }
+            res = text;
+            if (out1)
+            {
+                out2 = text;
+            }
+       
 
 
         }
