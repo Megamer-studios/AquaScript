@@ -33,6 +33,8 @@ namespace Shinterface
         string basestr = "";
         string pathstr = "";
         bool showError = false;
+        List<string> log = new List<string>();
+        bool logging = false;
         public Form1()
         {
             InitializeComponent();
@@ -1153,6 +1155,7 @@ namespace Shinterface
                     prgmVersion = String.Empty;
                     basestr = String.Empty;
                     pathstr = String.Empty;
+                    log.Clear();
                 }
                 else if (command == "clear-http")
                 {
@@ -1261,6 +1264,34 @@ namespace Shinterface
                 {
                     showError = false;
                 }
+                // Logs
+                else if (command == "log-start")
+                {
+                   logging = true;
+                    await NewLine("Logging started!", null, null);
+                }
+                else if (command == "log-end")
+                {
+                    try
+                    {
+                        logging = false;
+                        var workingDirec = Environment.CurrentDirectory;
+                        var thisLog = Path.Combine(workingDirec, DateTime.Now.ToString("dMyyyyHm") + "log.txt");
+                        string biglog = string.Join(Environment.NewLine, log);
+                   
+                        File.WriteAllTextAsync(thisLog, biglog);
+                        log.Clear();
+                        await NewLine("Log saving started in: " + thisLog, null, null);
+                    }
+                    catch(Exception ex) {
+                        await ThrowError(ex.Message, null);
+                    }
+
+                }
+                else if (command == "log-clear")
+                {
+                    log.Clear();
+                }
                 else
                 {
                     await ThrowError($"The command '{command}' is not recognized as a command!", Color.White);
@@ -1312,6 +1343,10 @@ namespace Shinterface
             {
                 out2 = text;
             }
+            if (logging)
+            {
+                log.Add(text);
+            }
 
 
         }
@@ -1359,7 +1394,10 @@ namespace Shinterface
             {
                 out2 = text;
             }
-       
+            if (logging)
+            {
+                log.Add(text);
+            }
 
 
         }
