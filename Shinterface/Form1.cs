@@ -35,6 +35,7 @@ namespace Shinterface
         bool showError = false;
         List<string> log = new List<string>();
         bool logging = false;
+        List<List<string>> functions = new List<List<string>>();
         public Form1()
         {
             InitializeComponent();
@@ -1156,6 +1157,7 @@ namespace Shinterface
                     basestr = String.Empty;
                     pathstr = String.Empty;
                     log.Clear();
+                    functions.Clear();
                 }
                 else if (command == "clear-http")
                 {
@@ -1291,6 +1293,49 @@ namespace Shinterface
                 else if (command == "log-clear")
                 {
                     log.Clear();
+                }
+                // Functions
+                else if (command.StartsWith("function "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(9);
+                        List<string> s2 = s1.Split(';').ToList();
+                        functions.Add(s2);
+                        await NewLine($"{s1}", null, null);
+                    }
+                    catch (Exception ex) {
+
+                        await ThrowError(ex.Message, null);
+
+                    }
+                    
+                }
+                else if (command.StartsWith("$func-"))
+                {
+                    try
+                    {
+                        string s1 = raw.Substring(6);
+                        List<string> s2 = s1.Split(' ').ToList();
+                        int a = int.Parse(s2[0]);
+
+                        List<string> thisFunc = functions[a];
+
+                        foreach (string cmnd in thisFunc)
+                        {
+
+                            await HandleCommands(cmnd);
+                        }
+                     
+                    }
+                    catch (Exception ex)
+                    {
+                        await ThrowError(ex.Message, null);
+                    }
+                }
+                else if (command == "clear-func")
+                {
+                    functions.Clear();
                 }
                 else
                 {
