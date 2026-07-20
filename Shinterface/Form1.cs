@@ -644,6 +644,13 @@ namespace Shinterface
                     await NewLine("Unhid the terminal", null, null);
 
                 }
+                else if (command.StartsWith("msg "))
+                {
+                    string s1 = command.Substring(4);
+                    await NewLine("Showing Messagebox: " + s1, null, null);
+                    MessageBox.Show(s1);
+
+                }
                 else if (command.StartsWith("get-text "))
                 {
               string s1 = command.Substring(9);
