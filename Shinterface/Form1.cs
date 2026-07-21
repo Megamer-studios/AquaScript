@@ -1249,9 +1249,11 @@ namespace Shinterface
                         var workingDirec = Environment.CurrentDirectory;
 
 
-                        string filename = Path.Combine(workingDirec, DateTime.Now.ToString("dMyyyyHm") + s1.Split('/').Last());
-                        using var file = client.GetStreamAsync(filename);
-                        using var fileStream = new FileStream(filename, FileMode.Create, FileAccess.Write);
+                        string filename = Path.Combine(workingDirec, s1.Split('/').Last());
+                        using HttpResponseMessage response = await client.GetAsync(s1);
+                        using HttpContent content = response.Content;
+                        byte[] bytes = await content.ReadAsByteArrayAsync();
+                        await File.WriteAllBytesAsync(filename, bytes);
                         await NewLine("Saving file to: " + filename, null, null);
                     }
                        
