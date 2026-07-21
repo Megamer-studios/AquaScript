@@ -78,6 +78,7 @@
             ForeColor = SystemColors.ControlLightLight;
             Name = "Form1";
             Text = "AquaCLI";
+            FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             DragDrop += Form1_DragDrop;
             KeyDown += Form1_KeyDown;

@@ -36,10 +36,15 @@ namespace Shinterface
         List<string> log = new List<string>();
         bool logging = false;
         List<List<string>> functions = new List<List<string>>();
-        public Form1()
+        public Form1(string[] args)
         {
             InitializeComponent();
-        
+            if (args.Length > 0)
+            {
+                HandleCommands($"runscript {args[0]}");
+
+            }
+
 
         }
 
@@ -110,8 +115,8 @@ namespace Shinterface
                 }
                 else if (command.StartsWith("say "))
                 {
-                        await NewLine(command.Substring(4), null, null);
-  
+                    await NewLine(command.Substring(4), null, null);
+
                 }
                 else if (command.StartsWith("say-c-"))
                 {
@@ -149,7 +154,7 @@ namespace Shinterface
                     {
                         await ThrowError(ex.Message, null);
                     }
-                 
+
                 }
                 else if (command == "hack")
                 {
@@ -190,7 +195,7 @@ namespace Shinterface
                     await NewLine("  \"projects mc\" - projects I've made for the Moscovium debloat software", Color.Purple, null);
                     await NewLine("  \"projects fr\" - projects I've made for the Freak-Lang development", Color.Pink, null);
                     await NewLine("[-]", Color.Red, null);
-                    await NewLine(" You can open the web-links with the \"run <link>\" command!", Color.Fuchsia, null);
+                    await NewLine(" You can open the web-links with the \"runps <link>\" command!", Color.Fuchsia, null);
                 }
                 else if (command == "projects aqua")
                 {
@@ -220,8 +225,8 @@ namespace Shinterface
                 }
                 else if (command == "projects fr")
                 {
-                    await NewLine("FreakDocs https://freak-docs.vercel.app/", Color.Pink, null);
-                    await NewLine("FREAK-Website https://freak-nine.vercel.app/", Color.Pink, null);
+                    await NewLine("FreakDocs (old) https://freak-docs.vercel.app/", Color.Pink, null);
+                    await NewLine("FREAK-Website (old) https://freak-nine.vercel.app/", Color.Pink, null);
 
                 }
                 // -End Projects-
@@ -266,7 +271,7 @@ namespace Shinterface
 
 
                 }
-              
+
                 else if (command.StartsWith("runscript "))
                 {
 
@@ -298,7 +303,7 @@ namespace Shinterface
                         string link = command.Substring(14);
                         await NewLine("Running script: " + link, Color.LightSkyBlue, null);
                         HttpClient client = new HttpClient();
-                  string result = await client.GetStringAsync(link);
+                        string result = await client.GetStringAsync(link);
 
                         string[] lines = result.Split('\n');
 
@@ -561,7 +566,7 @@ namespace Shinterface
                     }
                     catch (Exception ex)
                     {
-                        await ThrowError(ex.Message , null);
+                        await ThrowError(ex.Message, null);
                     }
 
 
@@ -576,58 +581,70 @@ namespace Shinterface
                         Wallpaper.Set(s1.Replace('"', ' '), "Fill");
                         await NewLine("Wallpaper(fill) set to : " + s1, null, null);
                     }
-                    catch (Exception ex) {
+                    catch (Exception ex)
+                    {
 
                         await ThrowError(ex.Message, null);
-                            }
-                   
+                    }
+
                 }
                 else if (command.StartsWith("wlp-fit "))
-                {try { 
-                    string s1 = command.Substring(8);
-                    Wallpaper.Set(s1.Replace('"', ' '), "Fit");
-                    await NewLine("Wallpaper(fit) set to : " + s1, null, null);
-                }
-                    catch (Exception ex) {
+                {
+                    try
+                    {
+                        string s1 = command.Substring(8);
+                        Wallpaper.Set(s1.Replace('"', ' '), "Fit");
+                        await NewLine("Wallpaper(fit) set to : " + s1, null, null);
+                    }
+                    catch (Exception ex)
+                    {
 
-                    await ThrowError(ex.Message, null);
+                        await ThrowError(ex.Message, null);
+                    }
                 }
-            }
                 else if (command.StartsWith("wlp-stretch "))
-                {try { 
+                {
+                    try
+                    {
 
-                    string s1 = command.Substring(12);
-                    Wallpaper.Set(s1.Replace('"', ' '), "Stretch");
-                    await NewLine("Wallpaper(stretch) set to : " + s1, null, null);
-                }
-                    catch (Exception ex) {
+                        string s1 = command.Substring(12);
+                        Wallpaper.Set(s1.Replace('"', ' '), "Stretch");
+                        await NewLine("Wallpaper(stretch) set to : " + s1, null, null);
+                    }
+                    catch (Exception ex)
+                    {
 
-                    await ThrowError(ex.Message, null);
+                        await ThrowError(ex.Message, null);
+                    }
                 }
-            }
                 else if (command.StartsWith("wlp-tile "))
-                {try { 
-                    string s1 = command.Substring(9);
-                    Wallpaper.Set(s1.Replace('"', ' '), "Tile");
-                    await NewLine("Wallpaper(tile) set to : " + s1, null, null);
-                }
-                    catch (Exception ex) {
+                {
+                    try
+                    {
+                        string s1 = command.Substring(9);
+                        Wallpaper.Set(s1.Replace('"', ' '), "Tile");
+                        await NewLine("Wallpaper(tile) set to : " + s1, null, null);
+                    }
+                    catch (Exception ex)
+                    {
 
-                    await ThrowError(ex.Message, null);
+                        await ThrowError(ex.Message, null);
+                    }
                 }
-            }
                 else if (command.StartsWith("wlp-span "))
                 {
-                    try { 
-                    string s1 = command.Substring(9);
-                    Wallpaper.Set(s1.Replace('"', ' '), "Span");
-                    await NewLine("Wallpaper(span) set to : " + s1, null, null);
-                }
-                    catch (Exception ex) {
+                    try
+                    {
+                        string s1 = command.Substring(9);
+                        Wallpaper.Set(s1.Replace('"', ' '), "Span");
+                        await NewLine("Wallpaper(span) set to : " + s1, null, null);
+                    }
+                    catch (Exception ex)
+                    {
 
-                    await ThrowError(ex.Message, null);
+                        await ThrowError(ex.Message, null);
+                    }
                 }
-            }
                 // -Wallpaper -end
                 else if (command == "g-rundirec")
                 {
@@ -654,7 +671,7 @@ namespace Shinterface
                 }
                 else if (command.StartsWith("get-text "))
                 {
-              string s1 = command.Substring(9);
+                    string s1 = command.Substring(9);
                     await NewLine(File.ReadAllText(s1), null, null);
 
                 }
@@ -701,8 +718,20 @@ namespace Shinterface
 
                 else if (command == "quit" || command == "exit")
                 {
-                    await NewLine("Quitting application...", Color.Red, null);
-                    Application.Exit();
+                    try
+                    {
+                        wtf = true;
+                        await NewLine("Quitting application...", Color.Red, null);
+                        Environment.Exit(0);
+                        this.Close();
+                        Application.Exit();
+
+                        wtf = false;
+                    }
+                    catch (Exception ex)
+                    {
+                        await ThrowError(ex.Message, null);
+                    }
 
                 }
                 // User-variables
@@ -713,7 +742,7 @@ namespace Shinterface
                         string s1 = command.Substring(8);
                         string blya = s1;
                         UserStrings.Add(blya);
-                   
+
 
                     }
                     catch (Exception ex)
@@ -843,7 +872,7 @@ namespace Shinterface
                     try
                     {
                         string s1 = command.Substring(10);
-             HttpClient client = new HttpClient();
+                        HttpClient client = new HttpClient();
 
                         PictureBox picture = new PictureBox();
                         Image image = Image.FromStream(await client.GetStreamAsync(s1));
@@ -928,7 +957,7 @@ namespace Shinterface
                         string s1 = command.Substring(8);
                         List<string> s2 = s1.Split(' ').ToList();
                         int a = int.Parse(s2[0]);
-                       
+
                         HttpClient client = new HttpClient();
                         PictureBox thisControl = (PictureBox)UserVariables[a];
                         Image image = Image.FromStream(await client.GetStreamAsync(s1.Substring(s2[0].Length)));
@@ -1093,7 +1122,7 @@ namespace Shinterface
                         string result = await client.GetStringAsync(s1);
                         string[] lines = result.Split('\n');
 
-                      
+
                         ip = lines[0];
                         prgmName = lines[1];
                         prgmAuthor = lines[2];
@@ -1116,15 +1145,15 @@ namespace Shinterface
                 {
                     try
                     {
-                
 
-                       
+
+
                         ip = string.Empty;
                         prgmName = string.Empty;
                         prgmAuthor = string.Empty;
                         prgmVersion = string.Empty;
                         prgmDesc = string.Empty;
-        
+
 
                     }
                     catch (Exception ex)
@@ -1167,7 +1196,7 @@ namespace Shinterface
                     UserVariables.Clear();
                     UserStrings.Clear();
                     UserInts.Clear();
-             
+
                 }
                 else if (command == "clear-usrvars")
                 {
@@ -1199,7 +1228,7 @@ namespace Shinterface
                 else if (command.StartsWith("basestr "))
                 {
                     string s1 = command.Substring(8);
-                  basestr = s1;
+                    basestr = s1;
                     await NewLine("Base string set to : " + basestr, null, null);
                 }
                 else if (command.StartsWith("pathstr "))
@@ -1208,21 +1237,30 @@ namespace Shinterface
                     pathstr = s1;
                     await NewLine("Path string set to : " + pathstr, null, null);
                 }
-                else if  (command.StartsWith("post "))
+                else if (command == "http")
                 {
-                    try { 
-                    string s1 = command.Substring(5).Trim().TrimStart('\uFEFF', '\u200B', '\u200D', '\uFEFE');
+                    await NewLine("Base: " + basestr, null, null);
+                    await NewLine("Path: " + pathstr, null, null);
+                    await NewLine(basestr + pathstr, null, null);
 
-      
-                      var content = new StringContent(s1, System.Text.Encoding.UTF8, "application/json");
-                       HttpClient client = new HttpClient();
-                      var response = await client.PostAsync(basestr + pathstr, content);
-                     var responseString = await response.Content.ReadAsStringAsync();
+                }
+                else if (command.StartsWith("post "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(5).Trim().TrimStart('\uFEFF', '\u200B', '\u200D', '\uFEFE');
+
+
+                        var content = new StringContent(s1, System.Text.Encoding.UTF8, "application/json");
+                        HttpClient client = new HttpClient();
+                        var response = await client.PostAsync(basestr + pathstr, content);
+                        var responseString = await response.Content.ReadAsStringAsync();
                         if (response.IsSuccessStatusCode)
                         {
                             await NewLine(responseString, null, null);
                         }
-                        else {
+                        else
+                        {
                             await ThrowError(responseString, null);
                         }
                     }
@@ -1250,9 +1288,10 @@ namespace Shinterface
                             await ThrowError(responseString, null);
                         }
                     }
-                    catch (Exception ex){ 
-                    
-                    await ThrowError(ex.Message, null);
+                    catch (Exception ex)
+                    {
+
+                        await ThrowError(ex.Message, null);
                     }
                 }
                 // Errors
@@ -1267,7 +1306,7 @@ namespace Shinterface
                 // Logs
                 else if (command == "log-start")
                 {
-                   logging = true;
+                    logging = true;
                     await NewLine("Logging started!", null, null);
                 }
                 else if (command == "log-end")
@@ -1278,12 +1317,13 @@ namespace Shinterface
                         var workingDirec = Environment.CurrentDirectory;
                         var thisLog = Path.Combine(workingDirec, DateTime.Now.ToString("dMyyyyHm") + "log.txt");
                         string biglog = string.Join(Environment.NewLine, log);
-                   
+
                         File.WriteAllTextAsync(thisLog, biglog);
                         log.Clear();
                         await NewLine("Log saving started in: " + thisLog, null, null);
                     }
-                    catch(Exception ex) {
+                    catch (Exception ex)
+                    {
                         await ThrowError(ex.Message, null);
                     }
 
@@ -1302,12 +1342,13 @@ namespace Shinterface
                         functions.Add(s2);
                         await NewLine($"{s1}", null, null);
                     }
-                    catch (Exception ex) {
+                    catch (Exception ex)
+                    {
 
                         await ThrowError(ex.Message, null);
 
                     }
-                    
+
                 }
                 else if (command.StartsWith("$func-"))
                 {
@@ -1324,7 +1365,7 @@ namespace Shinterface
 
                             await HandleCommands(cmnd);
                         }
-                     
+
                     }
                     catch (Exception ex)
                     {
@@ -1348,6 +1389,8 @@ namespace Shinterface
         {
             if (wtf)
             {
+                Environment.Exit(0);
+                this.Close();
                 Application.Exit();
                 this.Close();
                 Debug.Close();
@@ -1397,6 +1440,7 @@ namespace Shinterface
         {
             if (wtf)
             {
+                this.Close();
                 Application.Exit();
                 this.Close();
                 Debug.Close();
@@ -1541,6 +1585,12 @@ namespace Shinterface
         {
             string a = e.ToString();
             await NewLine(a, null, null);
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0);
+            Application.Exit();
         }
         //private async Task CreateForm(string title, int width, int height, List<Control>? controls)
         //{
