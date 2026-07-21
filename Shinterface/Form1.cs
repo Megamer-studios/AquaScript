@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using static System.Windows.Forms.LinkLabel;
 using Label = System.Windows.Forms.Label;
 using System.Text.Json.Nodes;
+using System.IO.Compression;
 
 namespace Shinterface
 {
@@ -1239,6 +1240,25 @@ namespace Shinterface
                     pathstr = s1;
                     await NewLine("Path string set to : " + pathstr, null, null);
                 }
+                else if (command.StartsWith("pull "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(5);
+                        HttpClient client = new HttpClient();
+                        var workingDirec = Environment.CurrentDirectory;
+
+
+                        string filename = Path.Combine(workingDirec, DateTime.Now.ToString("dMyyyyHm") + s1.Split('/').Last());
+                        using var file = client.GetStreamAsync(filename);
+                        using var fileStream = new FileStream(filename, FileMode.Create, FileAccess.Write);
+                        await NewLine("Saving file to: " + filename, null, null);
+                    }
+                       
+                    catch(Exception ex) {
+                    await ThrowError(ex.Message, null);
+                }
+            }
                 else if (command == "http")
                 {
                     await NewLine("Base: " + basestr, null, null);
@@ -1378,6 +1398,46 @@ namespace Shinterface
                 {
                     functions.Clear();
                 }
+                // ZIP
+                else if (command.StartsWith("extract "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(8);
+                     
+                        string folderName = Path.GetFileNameWithoutExtension(s1);
+                        var workingdirec = Environment.CurrentDirectory;
+                        string destName = Path.Combine(workingdirec, folderName);
+                        await NewLine("Extracting " + s1, null, null);
+                        ZipFile.ExtractToDirectory(s1, destName);
+                        await NewLine("Extracted; " + folderName, null, null);
+                    }
+                    catch(Exception ex) {
+                    await  ThrowError(ex.Message, null);
+                    }
+                }
+                else if (command.StartsWith("compress "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(9);
+                    
+                        string fileName = Path.GetFileName(s1);
+                     
+                        var workingdirec = Environment.CurrentDirectory;
+                   
+                        string folderName = Path.Combine( workingdirec , fileName + ".zip");
+                    
+                        await NewLine("Compressing " + s1, null, null);
+                        ZipFile.CreateFromDirectory(s1, folderName);
+                        await NewLine("Compressed " + folderName, null, null);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await ThrowError(ex.Message, null);
+                    }
+                }
                 else
                 {
                     await ThrowError($"The command '{command}' is not recognized as a command!", Color.White);
@@ -1507,6 +1567,7 @@ namespace Shinterface
             a = a.Replace("{desc}", prgmDesc);
             a = a.Replace("{basestr}", basestr);
             a = a.Replace("{pathstr}", pathstr);
+            a = a.Replace("{workingdirec}", Environment.CurrentDirectory);
             a = Regex.Replace(a, "\\{\\$\\s*(\\d+)\\s*\\}", match =>
             {
                 if (int.TryParse(match.Groups[1].Value, out var idx) && idx >= 0 && idx < UserVariables.Count)
