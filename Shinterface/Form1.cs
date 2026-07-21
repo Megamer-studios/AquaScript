@@ -327,6 +327,7 @@ namespace Shinterface
                     try
                     {
                         Form form = new Form();
+                        form.Icon = this.Icon;
                         string s1 = command.Substring(10);
                         List<string> s2 = s1.Split(" ").ToList();
                         await NewLine("Creating new window!", Color.Green, Color.LightGray);
@@ -456,6 +457,7 @@ namespace Shinterface
                     {
 
                         Form form = new Form();
+                        form.Icon = this.Icon;
                         string s1 = command.Substring(9);
                         List<string> s2 = s1.Split(" ").ToList();
                         await NewLine("Creating new window!", Color.Green, Color.LightGray);
