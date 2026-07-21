@@ -110,15 +110,8 @@ namespace Shinterface
                 }
                 else if (command.StartsWith("say "))
                 {
-                    try
-                    {
                         await NewLine(command.Substring(4), null, null);
-                    }
-                    catch (Exception ex)
-                    {
-                        await ThrowError(ex.Message, null);
-                    }
-
+  
                 }
                 else if (command.StartsWith("say-c-"))
                 {
@@ -134,6 +127,11 @@ namespace Shinterface
                     {
                         await ThrowError(ex.Message, null);
                     }
+
+                }
+                else if (command.StartsWith("throw "))
+                {
+                    await ThrowError(command.Substring(6), null);
 
                 }
                 else if (command == "colours")
