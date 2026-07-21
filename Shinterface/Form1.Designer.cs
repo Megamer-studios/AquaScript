@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             flowLayoutPanel1 = new FlowLayoutPanel();
             textBox1 = new TextBox();
             flowLayoutPanel1.SuspendLayout();
@@ -76,6 +77,7 @@
             Cursor = Cursors.IBeam;
             Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             ForeColor = SystemColors.ControlLightLight;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
             Text = "AquaCLI";
             FormClosing += Form1_FormClosing;
