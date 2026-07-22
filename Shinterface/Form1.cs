@@ -1198,7 +1198,7 @@ namespace Shinterface
                     functions.Clear();
                     logging = false;
                     showError = false;
-                    timeIt = false;
+                    timeIt = true;
                 }
                 else if (command == "clear-http")
                 {
@@ -1216,7 +1216,7 @@ namespace Shinterface
                     pathstr = String.Empty;
                     logging = false;
                     showError = false;
-                    timeIt = false;
+                    timeIt = true;
 
                 }
                 else if (command == "clear-usrvars")
