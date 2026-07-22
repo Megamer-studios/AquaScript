@@ -11,6 +11,7 @@ using Label = System.Windows.Forms.Label;
 using System.Text.Json.Nodes;
 using System.IO.Compression;
 
+
 namespace Shinterface
 {
     public partial class Form1 : Form
@@ -37,6 +38,7 @@ namespace Shinterface
         List<string> log = new List<string>();
         bool logging = false;
         List<List<string>> functions = new List<List<string>>();
+        bool timeIt = true;
         public Form1(string[] args)
         {
             InitializeComponent();
@@ -93,7 +95,11 @@ namespace Shinterface
             if (!string.IsNullOrEmpty(command))
             {
                 Stopwatch timer = new Stopwatch();
-                timer.Start();
+               
+                if (timeIt)
+                {
+                    timer.Start();
+                }
                 if (echo)
                 {
                     await NewLine(command, Color.Gray, null);
@@ -1474,13 +1480,25 @@ namespace Shinterface
                     await ThrowError(ex.Message, null);
                 }
             }
+                else if (command == "timer-on")
+                {
+                    timeIt = true;
+                }
+                else if (command == "timer-off")
+                {
+                    timeIt = false;
+                }
                 else
                 {
                     await ThrowError($"The command '{command}' is not recognized as a command!", Color.White);
                 }
-                timer.Stop();
-                await NewMS($"{command} took {timer.ElapsedMilliseconds.ToString()}ms to complete.");
-
+               
+                   
+                if (timeIt)
+                {
+                    timer.Stop();
+                    await NewMS($"{command} took {timer.ElapsedMilliseconds.ToString()}ms to complete.");
+                }
                 textBox1.Text = string.Empty;
 
             }
