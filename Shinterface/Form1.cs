@@ -1461,7 +1461,7 @@ namespace Shinterface
                         await ThrowError(ex.Message, null);
                     }
                 }
-                // create IO
+                // some IO
                 else if (command.StartsWith("mkfile "))
                 {
                     try
@@ -1490,6 +1490,22 @@ namespace Shinterface
                     await ThrowError(ex.Message, null);
                 }
             }
+                else if (command.StartsWith("write-all-"))
+                {
+                    try
+                    {
+                        string s1 = command.Split(' ').First().Substring(10);
+                        string s2 = command.Substring(command.Split(' ').First().Length).Replace("\\n", "\n");
+                        var workingdirec = Environment.CurrentDirectory;
+                        var path = Path.Combine(workingdirec, s1);
+                       File.WriteAllText(path, s2);
+                        await NewLine($"Wrote to {path}", null, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        await ThrowError(ex.Message, null);
+                    }
+                }
                 else if (command == "timer-on")
                 {
                     timeIt = true;
