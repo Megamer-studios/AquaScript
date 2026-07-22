@@ -92,6 +92,8 @@ namespace Shinterface
             command = HandleStrings(command);
             if (!string.IsNullOrEmpty(command))
             {
+                Stopwatch timer = new Stopwatch();
+                timer.Start();
                 if (echo)
                 {
                     await NewLine(command, Color.Gray, null);
@@ -1250,11 +1252,14 @@ namespace Shinterface
 
 
                         string filename = Path.Combine(workingDirec, s1.Split('/').Last());
+                        await NewLine("Connecting to: " + s1, null, null);
                         using HttpResponseMessage response = await client.GetAsync(s1);
                         using HttpContent content = response.Content;
+                        await NewLine("Reading data from: " + filename, null, null);
                         byte[] bytes = await content.ReadAsByteArrayAsync();
-                        await File.WriteAllBytesAsync(filename, bytes);
                         await NewLine("Saving file to: " + filename, null, null);
+                        File.WriteAllBytes(filename, bytes);
+                        await NewLine("Saved file to: " + filename, null, null);
                     }
                        
                     catch(Exception ex) {
@@ -1440,10 +1445,42 @@ namespace Shinterface
                         await ThrowError(ex.Message, null);
                     }
                 }
+                // create IO
+                else if (command.StartsWith("mkfile "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(7);
+                        var workingdirec = Environment.CurrentDirectory;
+                        var path = Path.Combine(workingdirec, s1);
+                        File.Create(path);
+                        await NewLine($"Created {path}", null, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        await ThrowError(ex.Message, null);
+                    }
+                }
+                else if (command.StartsWith("mkdir "))
+                {   try { 
+                    string s1 = command.Substring(6);
+                    var workingdirec = Environment.CurrentDirectory;
+                    var path = Path.Combine(workingdirec, s1);
+                    Directory.CreateDirectory(path);
+                        await NewLine($"Created {path}", null, null);
+                }
+                    catch (Exception ex)
+                    {
+                    await ThrowError(ex.Message, null);
+                }
+            }
                 else
                 {
                     await ThrowError($"The command '{command}' is not recognized as a command!", Color.White);
                 }
+                timer.Stop();
+                await NewMS($"{command} took {timer.ElapsedMilliseconds.ToString()}ms to complete.");
+
                 textBox1.Text = string.Empty;
 
             }
@@ -1496,6 +1533,45 @@ namespace Shinterface
             if (logging)
             {
                 log.Add(text);
+            }
+
+
+        }
+        private async Task NewMS(string text)
+        {
+           
+            TextBox textBox = new TextBox();
+            textBox.Text = text;
+            textBox.Font = textBox1.Font;
+            textBox.ForeColor = textBox1.ForeColor;
+            textBox.BackColor = textBox1.BackColor;
+           
+              
+                textBox.ForeColor = Color.Cyan;
+         
+                textBox.BackColor = Color.Gray;
+            
+            textBox.TextChanged += textBox1_TextChanged;
+            textBox.BorderStyle = BorderStyle.None;
+            Size size = TextRenderer.MeasureText(textBox.Text, textBox.Font);
+            textBox.Width = size.Width;
+
+            flowLayoutPanel1.Controls.Add(textBox);
+            try
+            {
+                flowLayoutPanel1.Controls.SetChildIndex(textBox1, flowLayoutPanel1.Controls.Count);
+            }
+            catch (Exception ex)
+            {
+                {
+                    await ThrowError(ex.Message, null);
+                }
+            }
+          
+            if (logging)
+            {
+                log.Add($"<TIMER>:[{text}]");
+                
             }
 
 
