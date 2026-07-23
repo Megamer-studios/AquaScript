@@ -1387,7 +1387,7 @@ namespace Shinterface
                 {
                     try
                     {
-                        string s1 = command.Substring(9);
+                        string s1 = raw.Substring(9);
                         List<string> s2 = s1.Split(';').ToList();
                         functions.Add(s2);
                         await NewLine($"{s1}", null, null);
@@ -1579,7 +1579,26 @@ namespace Shinterface
                         await ThrowError(ex.Message, null);
                     }
                 }
+                else if (command.StartsWith("repeat-"))
+                {
+                    string s1 = command.Split(' ').First().Substring(7);
+                    int a = int.Parse(s1);
+                    string s2 = command.Substring(command.Split(' ').First().Length);
+                    for (int i = 0; i < a; i++)
+                    {
+                        await HandleCommands(s2);
+                    } 
+                }
+                else if (command.StartsWith("repeatinf "))
+                {
+                    string s1 = command.Substring(10);
 
+                    while (true)
+                    {
+                        await HandleCommands(s1);
+                    }
+                    
+                }
                 else
                 {
                     await ThrowError($"The command '{command}' is not recognized as a command!", Color.White);
@@ -1642,7 +1661,7 @@ namespace Shinterface
             }
             if (logging)
             {
-                log.Add(text);
+                log.Add($"{DateTime.Now} : {text}");
             }
 
 
@@ -1680,7 +1699,7 @@ namespace Shinterface
           
             if (logging)
             {
-                log.Add($"<TIMER>:[{text}]");
+                log.Add($"{DateTime.Now} : <TIMER>:[{text}]");
                 
             }
 
@@ -1733,7 +1752,7 @@ namespace Shinterface
             }
             if (logging)
             {
-                log.Add(text);
+                log.Add($"{DateTime.Now} : <ERROR>[{text}]");
             }
 
 
