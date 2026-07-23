@@ -1,22 +1,26 @@
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.CSharp;
 using Microsoft.Win32;
+using System.CodeDom.Compiler;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.IO.Compression;
 using System.Net;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using static System.Windows.Forms.LinkLabel;
 using Label = System.Windows.Forms.Label;
-using System.Text.Json.Nodes;
-using System.IO.Compression;
 
 
 namespace Shinterface
 {
     public partial class Form1 : Form
     {
-
+      
         List<Control> UserVariables = new List<Control>();
         List<string> UserStrings = new List<string>();
         List<int> UserInts = new List<int>();
@@ -39,6 +43,7 @@ namespace Shinterface
         bool logging = false;
         List<List<string>> functions = new List<List<string>>();
         bool timeIt = true;
+        string[] imports = { "System", "System.Diagnostics", "Microsoft.Win32", "System.Net", "System.Reflection.Emit", "System.Runtime.InteropServices", "System.Text.RegularExpressions" };
         public Form1(string[] args)
         {
             InitializeComponent();
@@ -806,7 +811,7 @@ namespace Shinterface
                         Label label = new Label();
                         label.Font = textBox1.Font;
                         label.Text = s1;
-                        label.Size = TextRenderer.MeasureText(s1, label.Font);
+                        label.Size = TextRenderer.MeasureText(s1 + 2, label.Font);
                         UserVariables.Add(label);
 
                     }
@@ -1514,6 +1519,67 @@ namespace Shinterface
                 {
                     timeIt = false;
                 }
+                // C# Execution 
+                else if (command.StartsWith("csharp-f "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(9);
+                        var workingdirec = Environment.CurrentDirectory;
+                        var path = Path.Combine(workingdirec, s1);
+                     
+                        var options = ScriptOptions.Default
+               .AddImports(imports);
+                        string execution = "";
+                        foreach (var import in imports) {
+                            execution += $"using {import}; \n";
+                        }
+                        string e1 = File.ReadAllText(path).Replace("{:,}", ";");
+                        execution += e1;
+
+                        var script = CSharpScript.RunAsync(execution, options).Result;
+
+                        await NewLine("Executing: " + s1, null, null);
+                        foreach (var variable in script.Variables)
+                        {
+                            await NewLine($"{variable.Name} =  {variable.Value.ToString()}", null, null);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        await ThrowError(ex.Message, null);
+                    }
+                }
+                else if (command.StartsWith("csharp "))
+                {
+                    try
+                    {
+                        string s1 = command.Substring(7);
+
+                       
+
+                        var options = ScriptOptions.Default
+               .AddImports(imports);
+                        string execution = "";
+                        foreach (var import in imports)
+                        {
+                            execution += $"using {import}; \n";
+                        }
+                        string e1 = s1.Replace("{:,}", ";");
+                        execution += e1;
+                        var script = CSharpScript.RunAsync(execution, options).Result;
+
+                        await NewLine("Executing: " + s1, null, null);
+                        foreach (var variable in script.Variables) {
+                        await NewLine($"{variable.Name} =  {variable.Value.ToString()}", null, null);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        await ThrowError(ex.Message, null);
+                    }
+                }
+
                 else
                 {
                     await ThrowError($"The command '{command}' is not recognized as a command!", Color.White);
